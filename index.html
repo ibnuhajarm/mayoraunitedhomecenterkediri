@@ -1,0 +1,1914 @@
+﻿﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="blue">
+    <meta name="apple-mobile-web-app-title" content="Mayora UH">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#007bff">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="https://scontent.fsub6-1.fna.fbcdn.net/v/t39.30808-6/690624561_3284029975113083_8368985601429588036_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=dd6889&_nc_eui2=AeEK6yDLNk8bDYsWj3NI255M0Rpn2Llj7jDRGmfYuWPuMLbFHEToZrrau4fnNglIPLcumoK_gA1LrzOTFLYYEZTn&_nc_ohc=eAykbbfeiTEQ7kNvwHL_Stz&_nc_oc=AdoRYA9Dpele9HdJsw2apgMb6SvbLS_-ch0NnQnFQhkWONrY8PRLoX2WMiEDQNQcESs&_nc_zt=23&_nc_ht=scontent.fsub6-1.fna&_nc_gid=X2JR7dehwlrRrTAB9NkpMQ&_nc_ss=7b2a8&oh=00_Af6k0UktCABLBkH64PwaR3Kz8EJK-1dOVmyXoGXXjN0gpg&oe=6A027DCA">
+    <link rel="apple-touch-icon" sizes="192x192" href="https://scontent.fsub6-1.fna.fbcdn.net/v/t39.30808-6/690624561_3284029975113083_8368985601429588036_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=dd6889&_nc_eui2=AeEK6yDLNk8bDYsWj3NI255M0Rpn2Llj7jDRGmfYuWPuMLbFHEToZrrau4fnNglIPLcumoK_gA1LrzOTFLYYEZTn&_nc_ohc=eAykbbfeiTEQ7kNvwHL_Stz&_nc_oc=AdoRYA9Dpele9HdJsw2apgMb6SvbLS_-ch0NnQnFQhkWONrY8PRLoX2WMiEDQNQcESs&_nc_zt=23&_nc_ht=scontent.fsub6-1.fna&_nc_gid=X2JR7dehwlrRrTAB9NkpMQ&_nc_ss=7b2a8&oh=00_Af6k0UktCABLBkH64PwaR3Kz8EJK-1dOVmyXoGXXjN0gpg&oe=6A027DCA">
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Mayora United Home">
+    <meta name="description" content="Sistem manajemen stok dan input penjualan harian Mayora United Home - Akurat dan Efisien.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Mayora United Home">
+    <meta property="og:description" content="Sistem manajemen stok dan input penjualan harian Mayora United Home.">
+    <meta property="og:image" content="https://cdn.lynkid.my.id/profile/08-01-2026/1767868841949_9970987.webp?width=180&quality=90">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Mayora United Home">
+    <meta property="twitter:description" content="Sistem manajemen stok dan input penjualan harian Mayora United Home.">
+    <meta property="twitter:image" content="https://cdn.lynkid.my.id/profile/08-01-2026/1767868841949_9970987.webp?width=180&quality=90">
+
+    <title>Mayora United Home</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji'; }
+        body { background: linear-gradient(135deg, #007bff 0%, #00d4ff 50%, #007bff 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 30px; padding: 20px; background: rgba(255, 255, 255, 0.95); border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); }
+        .logo { max-width: 120px; margin-bottom: 10px; border-radius: 10px; background: transparent; }
+
+        h1 { color: #007bff; font-size: 2rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px; }
+        .tagline { color: #666; font-size: 1rem; }
+        .main-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); margin-bottom: 30px; }
+        h2 { color: #007bff; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 3px solid #00d4ff; font-size: 1.2rem; }
+        h3 { color: #00a8ff; margin-bottom: 10px; font-size: 0.9rem; }
+
+        /* PILIH JENIS */
+        .jenis-input-container { display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .btn-jenis { flex: 1; min-width: 200px; max-width: 250px; padding: 30px 20px; border: none; border-radius: 15px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .btn-jenis:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .btn-jenis.penjualan { background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); color: white; }
+        .btn-jenis.loading { background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); color: white; }
+        .btn-jenis.admin { background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%); color: white; }
+        .btn-jenis.sync { background: linear-gradient(135deg, #ff5722 0%, #e64a19 100%); color: white; }
+        .btn-icon { font-size: 3rem; display: block; margin-bottom: 10px; }
+        .btn-text { font-size: 1.3rem; font-weight: bold; text-transform: uppercase; }
+
+        /* ADMIN PANEL */
+        .admin-panel { display: none; }
+        .sync-panel { display: none; }
+        .admin-section { margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 10px; }
+        .admin-section h3 { color: #333; font-size: 1rem; border-bottom: 2px solid #9c27b0; padding-bottom: 8px; }
+        .sync-section h3 { color: #333; font-size: 1rem; border-bottom: 2px solid #ff5722; padding-bottom: 8px; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        .admin-table th { background: #9c27b0; color: white; padding: 8px; text-align: left; }
+        .admin-table td { padding: 8px; border-bottom: 1px solid #ddd; }
+        .admin-table tr:hover { background: #f0f0f0; }
+
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
+        .btn-tambah { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; width: 100%; margin-top: 5px; }
+        .btn-tambah:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(33, 150, 243, 0.4); }
+        .btn-hapus { background: #f44336; color: white; padding: 6px 10px; font-size: 0.75rem; }
+        .btn-hapus:hover { background: #d32f2f; }
+        .btn-reset { background: #ff9800; color: white; width: 100%; margin-bottom: 15px; }
+        .btn-reset:hover { background: #f57c00; }
+        .btn-generate { background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); color: white; width: 100%; margin-top: 15px; }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4); }
+        .btn-keluar { background: #666; color: white; width: 100%; margin-top: 15px; }
+        .btn-keluar:hover { background: #444; }
+
+        .price-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; max-height: 350px; overflow-y: auto; padding: 8px; background: #f5f5f5; border-radius: 10px; }
+        .price-card { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 2px solid #2196f3; border-radius: 8px; padding: 8px; text-align: center; transition: all 0.3s; cursor: pointer; }
+        .price-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3); }
+        .price-card.selected { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; }
+        .price-card.disabled { background: #e0e0e0; border-color: #ccc; cursor: not-allowed; opacity: 0.6; }
+        .price-card.disabled:hover { transform: none; box-shadow: none; }
+        .price-card .kode { font-size: 0.65rem; color: #1976f2; margin-bottom: 2px; }
+        .price-card.selected .kode { color: #ffeb3b; }
+        .price-card .product-name { font-size: 0.8rem; font-weight: bold; margin-bottom: 3px; line-height: 1.2; }
+        .price-card .product-price { font-size: 0.85rem; color: #1976f2; font-weight: bold; }
+        .price-card.selected .product-price { color: #ffeb3b; }
+        .price-card .stok-info { font-size: 0.7rem; color: #4caf50; margin-top: 3px; }
+        .price-card.disabled .stok-info { color: #f44336; }
+
+        .input-group { margin-bottom: 12px; }
+        label { display: block; color: #333; font-weight: 600; margin-bottom: 5px; font-size: 0.85rem; }
+        input, select { width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; font-size: 0.9rem; transition: all 0.3s; }
+        input:disabled, select:disabled { background: #e0e0e0; color: #666; cursor: not-allowed; }
+        input:focus, select:focus { outline: none; border-color: #2196f3; box-shadow: 0 0 0 3px rgba(33, 150,243,0.2); }
+
+        .product-section { display: flex; gap: 20px; }
+        .product-section .main-card { flex: 1; }
+        .product-section .main-card:first-child { flex: 1.2; }
+
+        .table-container { margin-top: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; padding: 10px; text-align: left; font-weight: 600; font-size: 0.8rem; }
+        td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.8rem; }
+        tr:hover { background: #f5f5f5; }
+
+        .total-section { margin-top: 20px; padding: 20px; background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); border-radius: 12px; color: white; text-align: center; }
+        .total-label { font-size: 1.1rem; margin-bottom: 8px; }
+        .total-amount { font-size: 2.2rem; font-weight: bold; color: #ffeb3b; }
+        .sales-name-display { font-size: 0.95rem; font-weight: bold; color: #fff; text-transform: uppercase; margin-top: 10px; }
+
+        .info-badge { display: inline-block; background: #2196f3; color: white; padding: 4px 10px; border-radius: 15px; font-size: 0.75rem; margin-left: 8px; }
+        .locked-badge { background: #ff9800; }
+
+        .modal-laporan { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; max-width: 480px; width: 90%; text-align: center; max-height: 85vh; overflow-y: auto; }
+
+        .modal-content-capture { background: white; padding: 40px; border-radius: 12px; width: 1400px; min-height: 700px; text-align: center; display: none; position: absolute; left: -9999px; font-size: 18px; }
+        .laporan-box { background: linear-gradient(135deg, #007bff 0%, #0056b3 100%); padding: 30px; border-radius: 15px; color: white; }
+        .laporan-title { font-size: 24px; font-weight: bold; margin-bottom: 15px; }
+        .laporan-sales { font-size: 28px; font-weight: bold; color: #ffeb3b; margin-bottom: 20px; }
+        .laporan-tanggal { font-size: 22px; color: #ffffff; margin-top: 10px; }
+        .laporan-total { font-size: 36px; font-weight: bold; color: #ffeb3b; }
+
+        .laporan-detail { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .laporan-detail-wrap { display: flex; gap: 30px; justify-content: center; }
+        .laporan-detail-wrap .tabel-kolom { flex: 1; min-width: 0; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+
+        .form-row-2 { display: flex; gap: 10px; align-items: flex-end; }
+        .form-row-3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr 0.8fr; gap: 10px; }
+        @media (max-width: 900px) { .product-section { flex-direction: column; } .price-list { grid-template-columns: repeat(2, 1fr); } .jenis-input-container { flex-direction: column; align-items: center; } .btn-jenis { max-width: 100%; } }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .form-row-2 { flex-direction: column; } .form-row-3 { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } .total-amount { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <img src="https://cdn.lynkid.my.id/profile/08-01-2026/1767868841949_9970987.webp?width=180&quality=90" class="logo" alt="Logo">
+        <h1>Mayora United Home</h1>
+        <div id="headerNotifications" style="margin-top:10px; display:flex; flex-direction:column; gap:8px; align-items:center;">
+            <p class="tagline" style="margin:0;">Pilih Jenis Input</p>
+            <div id="stokGudangInfo" style="background:#e8f5e9; padding:8px; border-radius:8px; display:none; width:100%; max-width:520px;">
+                <span style="color:#2e7d32; font-size:0.85rem;"></span>
+            </div>
+            <div id="stokSalesHeaderInfo" style="background:#e3f2fd; padding:8px; border-radius:8px; display:none; width:100%; max-width:520px;">
+                <span style="color:#0277bd; font-size:0.85rem;"></span>
+            </div>
+            <div id="autoSyncStatusSalesMaster" style="background:#fff3e0; padding:8px; border-radius:8px; display:none; width:100%; max-width:520px;">
+                <span style="color:#e65100; font-size:0.85rem;"></span>
+            </div>
+            <div id="autoSyncStatusProdukMaster" style="background:#fff3e0; padding:8px; border-radius:8px; display:none; width:100%; max-width:520px;">
+                <span style="color:#e65100; font-size:0.85rem;"></span>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-card" id="pilihJenisCard">
+        <h2>Silakan Pilih Jenis Input</h2>
+        <div class="jenis-input-container">
+            <button class="btn-jenis sync" type="button" onclick="superSyncSemuaData()">
+                <span class="btn-icon" aria-hidden="true">🔄</span>
+                <span class="btn-text">SYNC DATA</span>
+            </button>
+            <button class="btn-jenis penjualan" onclick="pilihJenis('penjualan')">
+                <span class="btn-icon" aria-hidden="true">💰</span>
+                <span class="btn-text">Input Penjualan</span>
+            </button>
+            <button class="btn-jenis loading" onclick="pilihJenis('loading')">
+                <span class="btn-icon" aria-hidden="true">📦</span>
+                <span class="btn-text">Input Loadingan</span>
+            </button>
+            <button class="btn-jenis admin" onclick="cekPasswordAdmin()">
+                <span class="btn-icon" aria-hidden="true">🔒</span>
+                <span class="btn-text">Admin</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- SYNC STOK PANEL -->
+    <div class="main-card sync-panel" id="syncStokPanel">
+        <h2>📦¦ Stok Gudang</h2>
+
+        <div class="admin-section sync-section">
+            <h3>📦Š Status Stok Gudang Saat Ini</h3>
+            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <p style="font-size: 0.85rem; color: #333; margin-bottom: 10px;"><strong>📦¦ Total Stok:</strong></p>
+                <p style="font-size: 1.1rem; color: #007bff;"><strong><span id="syncTotalItem">0</span> item</strong> dengan total <strong><span id="syncTotalQty">0</span> pcs</strong></p>
+                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Update terakhir: <span id="syncLastUpdate">Belum ada</span></p>
+            </div>
+            <button type="button" class="btn btn-tambah" onclick="refreshStokDisplay()" style="width:100%; background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);">⟳ Refresh Tampilan</button>
+        </div>
+
+        <div class="admin-section sync-section">
+            <h3>⟳ Sinkron Stok Gudang</h3>
+            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <p style="font-size: 0.8rem; color: #666;">Sinkron stok gudang dari file CSV lokal atau Google Sheet.</p>
+                <p style="font-size: 0.75rem; color: #999; margin-top: 5px;">Format: kode_produk,jumlah_stok</p>
+            </div>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <button type="button" class="btn btn-tambah" onclick="autoSyncStok('google')" style="background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%); width: 100%;">⟳ Sync Google Sheet</button>
+            </div>
+            <div id="autoSyncStatus" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"></div>
+
+            <div class="admin-section sync-section">
+                <h3>⟳ Sinkronasi Stok Sales</h3>
+                <button type="button" class="btn btn-tambah" onclick="autoSyncStokSales()" style="background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%); width: 100%; margin-top: 10px;">⟳ Sync Stok Sales dari Google Sheet</button>
+                <div id="autoSyncStatusSales" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"></div>
+            </div>
+        </div>
+
+        <div class="admin-section sync-section">
+            <h3>Daftar Stok Gudang (<span id="syncJumlahStok">0</span> item)</h3>
+            <div style="max-height: 200px; overflow-y: auto;">
+                <table class="admin-table" id="tabelSyncStok" style="border: 2px solid #ff5722;">
+                    <thead><tr><th>Kode</th><th>Stok</th><th>Status</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn btn-keluar" onclick="keluarSync()">Kembali ke Menu</button>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div class="main-card admin-panel" id="adminPanel">
+        <h2>Panel Admin</h2>
+
+        <div class="admin-section">
+            <h3>Tambah Produk Baru</h3>
+            <form id="formTambahProduk">
+                <div class="form-row-3">
+                    <div class="input-group">
+                        <label>Kode Produk</label>
+                        <input type="text" id="adminKodeProduk" placeholder="Contoh: 410999" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Harga (Rp)</label>
+                        <input type="number" id="adminHargaProduk" placeholder="Contoh: 20000" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Nama Produk</label>
+                    <input type="text" id="adminNamaProduk" placeholder="Nama lengkap produk" required>
+                </div>
+                <button type="submit" class="btn btn-tambah">Tambah Produk</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h3>Upload Produk Baru (CSV)</h3>
+            <div id="autoSyncStatusProdukMaster" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"></div>
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+
+                <p style="font-size: 0.85rem; color: #333; margin-bottom: 10px;"><strong>Format CSV:</strong> kode_produk,nama_produk,harga</p>
+                <p style="font-size: 0.8rem; color: #666;">Contoh: <code>410999,PRODUK BARU,25000</code></p>
+            </div>
+            <form id="formUploadProdukCsv">
+                <div class="input-group">
+                    <label>Pilih File CSV</label>
+                    <input type="file" id="fileCsvProduk" accept=".csv" style="padding: 8px;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn btn-tambah" style="flex: 1;">Upload Produk</button>
+                    <button type="button" class="btn btn-reset" style="flex: 1;" onclick="downloadTemplateProduk()">Download Template</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h3>Tambah Sales Baru</h3>
+            <form id="formTambahSales">
+                <div class="form-row-3">
+                    <div class="input-group">
+                        <label>Pilih Area</label>
+                        <select id="adminArea" required>
+                            <option value="">-- pilih Area --</option>
+                            <option value="MUH KEDIRI1">MUH KEDIRI1</option>
+                            <option value="MUH KEDIRI2">MUH KEDIRI2</option>
+                            <option value="MUH KEDIRI3">MUH KEDIRI3</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Kode Sales</label>
+                        <input type="text" id="adminKodeSales" placeholder="Contoh: 719 (3-4 digit angka)" maxlength="4" minlength="3" pattern="[0-9]{3,4}" title="Masukkan 3 sampai 4 digit angka" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Nama Sales</label>
+                        <input type="text" id="adminNamaSales" placeholder="Nama sales baru" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-tambah">Tambah Sales</button>
+            </form>
+        </div>
+
+        <div class="admin-section">
+            <h3>Upload Sales Baru (CSV)</h3>
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                <p style="font-size: 0.85rem; color: #333; margin-bottom: 10px;"><strong>Format CSV:</strong> area,kode_sales,nama_sales</p>
+                <p style="font-size: 0.8rem; color: #666;">Contoh: <code>MUH KEDIRI1,0888,NAMA SALES BARU</code></p>
+                <p style="font-size: 0.75rem; color: #999;">* Area harus: MUH KEDIRI1, MUH KEDIRI2, atau MUH KEDIRI3</p>
+            </div>
+            <form id="formUploadSalesCsv">
+                <div class="input-group">
+                    <label>Pilih File CSV</label>
+                    <input type="file" id="fileCsvSales" accept=".csv" style="padding: 8px;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="btn btn-tambah" style="flex: 1;">Upload Sales</button>
+                    <button type="button" class="btn btn-reset" style="flex: 1;" onclick="downloadTemplateSales()">Download Template</button>
+                </div>
+            </form>
+
+
+        </div>
+
+        <div class="admin-section" style="background: #fff3e0; border: 2px solid #ff9800;">
+            <h3 style="color: #e65100;">💾 Manajemen Data Master</h3>
+            <p style="font-size: 0.8rem; margin-bottom: 10px;">Gunakan tombol ini jika Anda baru saja mengubah daftar produk/sales di kodingan (script) dan ingin menyimpannya secara permanen ke browser.</p>
+            <button type="button" class="btn btn-reset" onclick="migrasiDataKeStorage()" style="background: #ff9800;">💾 Pindahkan Data Script ke Browser</button>
+            <button type="button" class="btn btn-keluar" onclick="resetKeDefault()" style="margin-top: 10px; background: #f44336;">⚠️ Hapus Data Browser (Reset ke Script)</button>
+        </div>
+
+        <div class="admin-section">
+            <h3>Daftar Produk (<span id="jumlahProduk">0</span> item)</h3>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="admin-table" id="tabelProdukAdmin">
+                    <thead><tr><th>Kode</th><th>Nama</th><th>Harga</th><th>Aksi</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="admin-section">
+            <h3>Daftar Sales</h3>
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="admin-table" id="tabelSalesAdmin">
+                    <thead><tr><th>Area</th><th>Kode</th><th>Nama Sales</th><th>Aksi</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn btn-keluar" onclick="keluarAdmin()">Keluar dari Admin</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="mainContent" style="display:none;">
+        <div class="main-card">
+            <h2 id="titleArea">Area & Sales <span id="selectedInfo" class="info-badge"></span></h2>
+            <div class="form-row-2">
+                <div class="input-group">
+                    <label>Pilih Area</label>
+                    <select id="area" onchange="ubahArea()">
+                        <option value="">-- Pilih Area --</option>
+                        <option value="MUH KEDIRI1">MUH KEDIRI1</option>
+                        <option value="MUH KEDIRI2">MUH KEDIRI2</option>
+                        <option value="MUH KEDIRI3">MUH KEDIRI3</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Pilih Sales</label>
+                    <select id="salesName" onchange="ubahSales()">
+                        <option value="">-- Pilih Area dulu --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <button id="btnReset" class="btn btn-reset" onclick="resetSession()" style="display:none;">Ganti Sales Baru (Hapus Semua Data)</button>
+
+        <div class="product-section">
+            <div class="main-card">
+                <h2 id="titleProduk">Daftar Harga Produk</h2>
+                <h3>Klik produk untuk memilih (hanya produk dengan stok tersedia)</h3>
+
+                <div class="form-row-2" style="margin-bottom: 10px;">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label style="margin-bottom: 6px;">Cari Produk</label>
+                        <input type="text" id="produkSearchInput" placeholder="Cari kode / nama produk..." oninput="applyProdukSearch()">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0; flex: 0 0 190px;">
+                        <label style="margin-bottom: 6px; opacity: 0;">.</label>
+                        <button type="button" class="btn btn-tambah" id="btnProdukSearch" onclick="applyProdukSearch()" style="margin-top: 20px;">⇵ Search</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-reset" id="btnProdukSearchReset" onclick="clearProdukSearch()" style="display:none; width:100%; margin-bottom: 15px;">Reset Search</button>
+
+                <div class="price-list" id="priceList"></div>
+            </div>
+
+            <div class="main-card">
+                <h2 id="titleTambah">Tambah Produk</h2>
+                    <form id="productForm" onsubmit="event.preventDefault(); tambahKeDaftar();">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Kode</label>
+                            <input type="text" id="kodeBarang" readonly style="background-color: #f0f0f0; color: #666;">
+                        </div>
+                        <div class="input-group" style="grid-column: span 2;">
+                            <label>Nama Produk</label>
+                            <input type="text" id="productName" placeholder="Klik produk" readonly style="background-color: #f0f0f0; color: #666;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Jumlah</label>
+                            <input type="number" id="quantity" min="1" value="1" required>
+                        </div>
+                        <div class="input-group" style="grid-column: span 2;">
+                            <label>Harga (Rp)</label>
+                            <input type="text" id="price" readonly style="background-color: #f0f0f0; color: #666;">
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-tambah" id="btnTambah" onclick="tambahKeDaftar()">Tambah ke Daftar</button>
+                </form>
+
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>No</th><th>Kode</th><th>Produk</th><th>Jml</th><th>Total</th><th></th></tr></thead>
+                        <tbody id="productList"><tr><td colspan="6" style="text-align: center; color: #999; padding: 20px;">Belum ada produk.</td></tr></tbody>
+                    </table>
+                </div>
+
+                <div class="total-section">
+                    <div class="total-label" id="totalLabel">TOTAL PENJUALAN</div>
+                    <div class="total-amount" id="totalSales">Rp 0</div>
+                    <div class="sales-name-display" id="salesInfoDisplay">-</div>
+                </div>
+
+                <button id="btnGenerate" class="btn btn-generate" onclick="generateLaporan()" style="display:none;">Akhiri Penjualan</button>
+                <button class="btn btn-keluar" onclick="keluarMainContent()" style="margin-top: 10px;">Kembali ke Menu Utama</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 Mayora United Home - All Rights Reserved | v2.11 Created by Ibnu</p>
+    </footer>
+
+    <div id="modalPasswordAdmin" class="modal-laporan">
+        <div class="modal-content">
+            <h2>Masukkan Password Admin</h2>
+            <div class="input-group">
+                <input type="password" id="adminPasswordInput" placeholder="Password" style="text-align: center; font-size: 1.2rem;">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-tambah" onclick="verifikasiPassword()" style="width:auto;">Login</button>
+                <button class="btn btn-reset" onclick="tutupModalPassword()" style="width:auto;">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modalLaporan" class="modal-laporan">
+        <div class="modal-content">
+            <h2 id="modalTitle">Laporan Penjualan</h2>
+            <div class="laporan-box">
+                <div class="laporan-title">Mayora United Home</div>
+                <div id="laporanSales" class="laporan-sales">-</div>
+            </div>
+            <div class="laporan-detail">
+                <table>
+                    <thead><tr><th>Kode</th><th>Produk</th><th>Qty</th><th>Total</th></tr></thead>
+                    <tbody id="laporanDetail"></tbody>
+                </table>
+            </div>
+            <div class="laporan-box">
+                <div class="laporan-title" id="modalTotalLabel">Total Penjualan</div>
+                <div id="laporanTotal" class="laporan-total">Rp 0</div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-tambah" onclick="downloadGambar()" style="width:auto;">Simpan Gambar</button>
+                <button class="btn btn-reset" onclick="tutupModal()" style="width:auto;">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="captureContent" class="modal-content-capture">
+        <h2 id="captureTitle">Laporan Penjualan</h2>
+        <div class="laporan-box">
+            <div class="laporan-title">Mayora United Home</div>
+            <div id="laporanSalesCapture" class="laporan-sales">-</div>
+            <div id="laporanTanggalCapture" class="laporan-tanggal">-</div>
+        </div>
+        <div class="laporan-detail">
+            <div class="laporan-detail-wrap" id="tabelWrapper"></div>
+        </div>
+        <div class="laporan-box">
+            <div class="laporan-title" id="captureTotalLabel">Total Penjualan</div>
+            <div id="laporanTotalCapture" class="laporan-total">Rp 0</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+    // DISINI TEMPATNYA, BRO! Ini data master aplikasi lu.
+    // ============ DATA ============
+    let produkList = [];
+    let dataSales = {};
+
+    // Variabel bantu untuk mode edit
+    let editingProdukIndex = -1;
+    let editingSalesOldInfo = null; // {area, kode}
+
+    // Kode di bawah ini yang make data di atas (produkList & dataSales)
+
+    // ============ LOCALSTORAGE (SIMPAN DATA) ============
+    const STORAGE_KEY_PRODUK = 'muh_produkList';
+    const STORAGE_KEY_SALES = 'muh_dataSales';
+
+    function loadDataDariStorage() {
+        try {
+            let p = localStorage.getItem(STORAGE_KEY_PRODUK);
+            let s = localStorage.getItem(STORAGE_KEY_SALES);
+            if (p) produkList = JSON.parse(p);
+            if (s) dataSales = JSON.parse(s);
+            console.log('Data master berhasil dimuat dari storage');
+        } catch(e) {
+            console.error('Gagal load storage:', e);
+        }
+    }
+
+    function simpanDataKeStorage() {
+        try {
+            localStorage.setItem(STORAGE_KEY_PRODUK, JSON.stringify(produkList));
+            localStorage.setItem(STORAGE_KEY_SALES, JSON.stringify(dataSales));
+            console.log('Data master berhasil disimpan');
+        } catch(e) {
+            console.error('Gagal simpan storage:', e);
+        }
+    }
+
+    // Jalankan load data saat aplikasi dibuka
+    loadDataDariStorage();
+
+    function migrasiDataKeStorage() {
+        if (confirm('Ini akan memindahkan data produk dan sales yang ada di kodingan script ke penyimpanan browser. Data lama di browser akan tertimpa. Lanjutkan?')) {
+            simpanDataKeStorage();
+            alert('Data master berhasil dipindahkan ke browser! Halaman akan dimuat ulang.');
+            location.reload();
+        }
+    }
+
+    function resetKeDefault() {
+        if (confirm('YAKIN RESET? Semua data tambahan yang Anda input lewat layar Admin akan dihapus dan kembali ke data bawaan script!')) {
+            localStorage.removeItem(STORAGE_KEY_PRODUK);
+            localStorage.removeItem(STORAGE_KEY_SALES);
+            location.reload();
+        }
+    }
+
+    // ============ STOK GUDANG ============
+    let stokGudang = {};
+    let lastUpdateStok = null;
+
+    // Reset biar hasil sync antar laptop tidak "nyampur" data lama
+    function resetStokGudangToZero() {
+        if (!stokGudang || typeof stokGudang !== 'object') stokGudang = {};
+        Object.keys(stokGudang).forEach(function(k) { stokGudang[k] = 0; });
+    }
+
+    function getTotalStokReady() {
+        let totalItems = 0;
+        let totalQty = 0;
+        for (let kode in stokGudang) {
+            if (stokGudang[kode] > 0) {
+                totalItems++;
+                totalQty += stokGudang[kode];
+            }
+        }
+        return { items: totalItems, qty: totalQty };
+    }
+
+    function renderStokGudangInfo() {
+        let info = getTotalStokReady();
+        let el = document.getElementById('stokGudangInfo');
+        if (el) {
+            let lastUpdate = lastUpdateStok ? ' | Update: ' + lastUpdateStok : '';
+            el.style.display = 'block';
+            el.innerHTML = '<span style="color:#2e7d32; font-size:0.85rem;">✅ <strong>STOK GUDANG:</strong> ' + info.items + ' item (' + info.qty + ' pcs)' + lastUpdate + '</span>';
+        }
+    }
+
+    function renderStokSalesHeaderInfo() {
+        let el = document.getElementById('stokSalesHeaderInfo');
+        if (!el) return;
+
+        let stokSalesHariIni = (stokSalesHarian && stokSalesHarian[tanggalHariIni]) ? stokSalesHarian[tanggalHariIni] : {};
+        let aktifCount = 0;
+        let itemCount = 0;
+
+        for (let kodeSalesKey in stokSalesHariIni) {
+            let mapProduk = stokSalesHariIni[kodeSalesKey] || {};
+            let hasActiveProduk = false;
+            for (let kodeProdukKey in mapProduk) {
+                let qty = parseInt(mapProduk[kodeProdukKey], 10) || 0;
+                if (qty > 0) { itemCount++; hasActiveProduk = true; }
+            }
+            if (hasActiveProduk) aktifCount++;
+        }
+
+        if (aktifCount > 0) {
+            el.style.display = 'block';
+            el.innerHTML = '<span style="color:#0277bd; font-size:0.85rem;">🎒 <strong>STOK SALES:</strong> ' + aktifCount + ' AKTIF (' + itemCount + ' item) | ' + new Date().toLocaleTimeString('id-ID') + '</span>';
+        }
+    }
+
+    function renderSyncStokPanel() {
+        let info = getTotalStokReady();
+        document.getElementById('syncTotalItem').textContent = info.items;
+        document.getElementById('syncTotalQty').textContent = info.qty;
+        document.getElementById('syncLastUpdate').textContent = lastUpdateStok || 'Belum ada';
+
+        let tbodySync = document.querySelector('#tabelSyncStok tbody');
+        let stokData = [];
+        for (var kode in stokGudang) {
+            if (stokGudang[kode] && stokGudang[kode] > 0) stokData.push({kode: kode, stok: stokGudang[kode]});
+        }
+        document.getElementById('syncJumlahStok').textContent = stokData.length;
+
+        if (stokData.length === 0) {
+            tbodySync.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #999;">Belum ada stok gudang.</td></tr>';
+            return;
+        }
+
+        tbodySync.innerHTML = stokData.map(function(s) {
+            let status = s.stok > 0 ? '<span style="color: #4caf50;">✅ Tersedia</span>' : '<span style="color: #f44336;">❌ Habis</span>';
+            return '<tr>' +
+                '<td>' + s.kode + '</td>' +
+                '<td>' + s.stok + '</td>' +
+                '<td>' + status + '</td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    function refreshStokDisplay() {
+        renderSyncStokPanel();
+        renderStokGudangInfo();
+        if (typeof renderPriceList === 'function') renderPriceList();
+        alert('Display berhasil di-refresh!');
+    }
+
+    function bukaSyncStok() {
+        document.getElementById('pilihJenisCard').style.display = 'none';
+        document.getElementById('syncStokPanel').style.display = 'block';
+        renderSyncStokPanel();
+    }
+
+    function keluarSync() {
+        document.getElementById('syncStokPanel').style.display = 'none';
+        document.getElementById('pilihJenisCard').style.display = 'block';
+        renderStokGudangInfo();
+        if (typeof renderPriceList === 'function') renderPriceList();
+    }
+
+    // ============ SYNC SETUP ============
+    const GOOGLE_SHEET_ID = '1Uu2890jy3FytzARqSZgIZN4ll60eVAi-cDGMV7Bo9fU';
+    const GOOGLE_SHEET_GID = '0';
+    const GOOGLE_SHEET_ID_STOK_SALES = '1H6Rs5yu_73y4wAgcC3vWS2wPW1hwQgn2SiLBk1qDnlY';
+    const GOOGLE_SHEET_GID_STOK_SALES = '0';
+
+    // Master data sales (langsung pakai URL public CSV)
+    const GOOGLE_SALES_MASTER_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRutpHSSBBXgE98pzH4-Jzu8YaDY2_Mb3BGP3HwJ4hPC1Q3frxTtx7puH127Cm7UarlS1HJp4lGFLgz/pub?output=csv';
+
+    // Master data produk (langsung pakai URL public CSV)
+    const GOOGLE_PRODUK_MASTER_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqx3mG1iD92svNxqNdj2FLCc5FQ6bxBB6BjkgyQv0vDe2KngEsmxHabFrne9oXnnSN-yYvZrKV3tEH/pub?output=csv';
+
+
+    // (nilai lama masih dibiarkan tidak dipakai)
+    const GOOGLE_SHEET_ID_SALES_MASTER = '2PACX-1vRutpHSSBBXgE98pzH4-Jzu8YaDY2_Mb3BGP3HwJ4hPC1Q3frxTtx7puH127Cm7UarlS1HJp4lGFLgz';
+    const GOOGLE_SHEET_GID_SALES_MASTER = '0';
+
+
+    // ============ STOK Gudang CSV PROCESS (DIBENERKAN RESET) ============
+    function processStokGudangCsv(csvContent, statusEl) {
+        // RESET state biar hasil sync konsisten antar laptop
+        resetStokGudangToZero();
+
+        var lines = csvContent.split('\n');
+        var updated = 0;
+        var errorLines = [];
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].replace(/\r/g, '').replace(/^\uFEFF/, '').trim();
+            if (!line) continue;
+
+            var parts = line.split(',');
+            if (parts.length < 2) continue;
+
+            var kode = parts[0].replace(/['"\uFEFF]/g, '').trim();
+            var stokStr = parts[1].replace(/['"\uFEFF]/g, '').trim();
+            var kodeSanitized = kode.replace(/\s+/g, '');
+            var stokSanitized = stokStr.replace(/\s+/g, '');
+
+            var normalizedKode = kodeSanitized.toLowerCase();
+            var normalizedStok = stokSanitized.toLowerCase();
+            if (i === 0 && (normalizedKode.indexOf('kode') === 0 || normalizedStok.indexOf('jumlah') === 0 || normalizedStok.indexOf('stok') === 0)) {
+                continue;
+            }
+
+            var stok = parseInt(stokSanitized, 10);
+            if (isNaN(stok)) {
+                errorLines.push('Baris ' + (i+1) + ': Stok harus angka');
+                continue;
+            }
+
+            var produkAda = produkList.find(function(p) { return p.kode === kodeSanitized; });
+            if (!produkAda) {
+                errorLines.push('Baris ' + (i+1) + ': Kode tidak ditemukan (' + kode + ')');
+                continue;
+            }
+
+            stokGudang[kodeSanitized] = stok;
+            updated++;
+        }
+
+        if (updated > 0) {
+            lastUpdateStok = new Date().toLocaleString('id-ID');
+            statusEl.style.background = '#e8f5e9';
+            statusEl.style.color = '#2e7d32';
+            statusEl.innerHTML = 'Berhasil sync ' + updated + ' item stok gudang!';
+            renderSyncStokPanel();
+            renderStokGudangInfo();
+            if (typeof renderPriceList === 'function') renderPriceList();
+        } else {
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#bf360c';
+            statusEl.innerHTML = 'Tidak ada data stok yang berhasil di-sync. Pastikan format CSV benar dan file berisi data.';
+        }
+
+        if (errorLines.length > 0) {
+            alert('Warning: ' + errorLines.length + ' baris error:\n' + errorLines.slice(0, 5).join('\n'));
+        }
+    }
+
+    // ============ STOK Sales CSV PROCESS (DIBENERKAN RESET per-hari) ============
+    let stokSalesHarian = {};
+    function processStokSalesCsv(csvContent, statusEl) {
+        // reset untuk tanggal ini biar antar laptop konsisten
+        stokSalesHarian[tanggalHariIni] = {};
+
+        var lines = csvContent.split('\n');
+        var updated = 0;
+        var errorLines = [];
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].replace(/\r/g, '').replace(/^\uFEFF/, '').trim();
+            if (!line) continue;
+
+            var parts = line.split(',');
+            if (parts.length < 3) continue;
+
+            var kodeSalesCsv = parts[0].replace(/['\x22\uFEFF]/g, '').trim();
+            var kodeProdukCsv = parts[1].replace(/['\x22\uFEFF]/g, '').trim();
+            var stokStr = parts[2].replace(/['\x22\uFEFF]/g, '').trim();
+
+            var kodeSalesSanitized = kodeSalesCsv.replace(/\s+/g, '').replace(/^0+/, '');
+            var kodeProdukSanitized = kodeProdukCsv.replace(/\s+/g, '');
+            var stokSanitized = stokStr.replace(/\s+/g, '');
+
+            if (i === 0 && kodeSalesSanitized.toLowerCase().indexOf('kode') >= 0) continue;
+
+            var stok = parseInt(stokSanitized, 10);
+            if (isNaN(stok)) { errorLines.push('Baris ' + (i+1) + ': Stok harus angka'); continue; }
+
+        // Ensure stokSalesHarian[tanggalHariIni] is an object before assigning
+            var salesAda = false;
+            for (var area in dataSales) {
+                var found = dataSales[area].find(function(s) { return s.kode === kodeSalesSanitized; });
+                if (found) { salesAda = true; break; }
+            }
+            if (!salesAda) { errorLines.push('Baris ' + (i+1) + ': Sales tidak ditemukan'); continue; }
+
+            var produkAda = produkList.find(function(p) { return p.kode === kodeProdukSanitized; });
+            if (!produkAda) { errorLines.push('Baris ' + (i+1) + ': Produk tidak ditemukan'); continue; }
+
+            if (!stokSalesHarian[tanggalHariIni][kodeSalesSanitized]) {
+                stokSalesHarian[tanggalHariIni][kodeSalesSanitized] = {};
+            }
+            stokSalesHarian[tanggalHariIni][kodeSalesSanitized][kodeProdukSanitized] = stok;
+            console.log(`Updated stokSalesHarian[${tanggalHariIni}][${kodeSalesSanitized}][${kodeProdukSanitized}] = ${stok}`);
+            updated++;
+        }
+
+        if (updated > 0) {
+            statusEl.style.background = '#e8f5e9';
+            statusEl.style.color = '#2e7d32';
+            statusEl.innerHTML = 'Berhasil sync ' + updated + ' item stok sales pada ' + new Date().toLocaleString('id-ID') + '!';
+            updateJumlahStokSales();
+            console.log('stokSalesHarian after sync:', stokSalesHarian);
+            renderPriceList();
+            renderStokSalesHeaderInfo();
+        } else {
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#bf360c';
+            statusEl.innerHTML = 'Tidak ada data stok sales yang berhasil di-sync.';
+        }
+
+        if (errorLines.length > 0) {
+            alert('Warning: ' + errorLines.length + ' baris error:\n' + errorLines.slice(0, 5).join('\n'));
+        }
+    }
+
+    // ============ PRODUK Master CSV PROCESS (Update/Overwrite) ============
+    function syncSemuaMaster() {
+        autoSyncProdukMaster();
+        autoSyncMasterAll();
+    }
+
+    function processProdukMasterCsv(csvContent, statusEl) {
+        var lines = csvContent.split('\n');
+        var updated = 0;
+        var added = 0;
+        var errorLines = [];
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].replace(/\r/g, '').replace(/^\uFEFF/, '').trim();
+            if (!line || (i === 0 && line.toLowerCase().includes('kode_produk'))) continue;
+
+            var parts = line.split(',');
+            if (parts.length < 3) continue;
+
+            var kode = parts[0].replace(/['"\uFEFF]/g, '').trim();
+            var nama = parts[1].replace(/['"\uFEFF]/g, '').trim();
+            var hargaStr = parts[2].replace(/['"\uFEFF]/g, '').trim();
+
+            if (!kode || !nama) continue;
+
+            var harga = parseInt(hargaStr, 10);
+            if (isNaN(harga)) {
+                errorLines.push('Baris ' + (i+1) + ': Harga harus angka');
+                continue;
+            }
+
+            var idx = produkList.findIndex(function(p) { return String(p.kode) === String(kode); });
+            if (idx > -1) {
+                produkList[idx] = { kode: kode, nama: nama, harga: harga };
+                updated++;
+            } else {
+                produkList.push({ kode: kode, nama: nama, harga: harga });
+                added++;
+            }
+        }
+
+        if (added > 0 || updated > 0) {
+            simpanDataKeStorage();
+            renderTabelAdmin();
+            statusEl.style.background = '#e8f5e9';
+            statusEl.style.color = '#2e7d32';
+            statusEl.innerHTML = 'Sync Berhasil! ' + added + ' produk baru, ' + updated + ' data diperbarui.';
+            renderPriceList();
+        } else {
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#bf360c';
+            statusEl.innerHTML = 'Tidak ada data produk baru yang diproses.';
+        }
+
+        if (errorLines.length > 0) {
+            alert('Warning: ' + errorLines.length + ' baris error:\n' + errorLines.slice(0, 5).join('\n'));
+        }
+    }
+
+    function processSalesMasterCsv(csvContent, statusEl) {
+
+        var lines = csvContent.split('\n');
+        var updated = 0;
+        var added = 0;
+        var errorLines = [];
+
+        // Helper untuk mencari dan menghapus sales berdasarkan kode di semua area
+        function findAndRemoveSalesByCode(kode) {
+            for (var area in dataSales) {
+                var idx = dataSales[area].findIndex(s => String(s.kode) === String(kode));
+                if (idx > -1) {
+                    dataSales[area].splice(idx, 1);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].replace(/\r/g, '').replace(/^\uFEFF/, '').trim();
+            if (!line || (i === 0 && line.toLowerCase().includes('area'))) continue;
+
+            var parts = line.split(',');
+            if (parts.length < 3) continue;
+
+            var areaCsv = parts[0].replace(/['"\uFEFF]/g, '').trim();
+            var kodeCsv = parts[1].replace(/['"\uFEFF]/g, '').trim().replace(/^0+/, '');
+            var namaCsv = parts[2].replace(/['"\uFEFF]/g, '').trim();
+
+            if (!areaCsv || !kodeCsv || !namaCsv) continue;
+            if (!/^[0-9]{3,4}$/.test(kodeCsv)) {
+                errorLines.push('Baris ' + (i+1) + ': Kode sales harus 3-4 digit');
+                continue;
+            }
+
+            // Cek apakah area valid
+            if (!dataSales[areaCsv]) {
+                dataSales[areaCsv] = [];
+            }
+
+            // Mekanisme Timpa: Hapus data lama jika kode sudah ada (meskipun beda area)
+            var wasExisted = findAndRemoveSalesByCode(kodeCsv);
+            
+            dataSales[areaCsv].push({ kode: kodeCsv, nama: namaCsv });
+            
+            if (wasExisted) updated++;
+            else added++;
+        }
+
+        if (added > 0 || updated > 0) {
+            simpanDataKeStorage();
+            renderTabelAdmin();
+            statusEl.style.background = '#e8f5e9';
+            statusEl.style.color = '#2e7d32';
+            statusEl.innerHTML = 'Sync Berhasil! ' + added + ' sales baru, ' + updated + ' data diperbarui.';
+        } else {
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#bf360c';
+            statusEl.innerHTML = 'Tidak ada data sales baru yang diproses.';
+        }
+    }
+
+    function autoSyncProdukMaster() {
+        var statusEl = document.getElementById('autoSyncStatusProdukMaster');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3e0';
+        statusEl.style.color = '#e65100';
+        statusEl.innerHTML = 'Menghubungkan ke Google Sheet...';
+
+        var googleUrl = GOOGLE_PRODUK_MASTER_CSV_URL + '&t=' + new Date().getTime();
+
+        var proxies = [
+            'https://corsproxy.io/?' + encodeURIComponent(googleUrl),
+            'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(googleUrl)
+        ];
+
+        var tryProxy = function(index) {
+            if (index >= proxies.length) {
+                statusEl.style.background = '#ffebee';
+                statusEl.style.color = '#c62828';
+                statusEl.innerHTML = 'Gagal mengambil data. Pastikan Sheet di-publish ke web (CSV).';
+                return;
+            }
+
+            fetch(proxies[index])
+                .then(res => { if (!res.ok) throw Error(); return res.text(); })
+                .then(content => {
+                    if (content.startsWith('<!DOCTYPE')) throw Error();
+                    processProdukMasterCsv(content, statusEl);
+                })
+                .catch(() => tryProxy(index + 1));
+        };
+
+        tryProxy(0);
+    }
+
+    function autoSyncMasterAll() {
+
+
+        var statusEl = document.getElementById('autoSyncStatusSalesMaster');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3e0';
+        statusEl.style.color = '#e65100';
+        statusEl.innerHTML = 'Menghubungkan ke Google Sheet...';
+
+        // Pakai URL CSV public langsung dari Google Sheets
+        var googleUrl = GOOGLE_SALES_MASTER_CSV_URL + '&t=' + new Date().getTime();
+
+
+        var proxies = [
+            'https://corsproxy.io/?' + encodeURIComponent(googleUrl),
+            'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(googleUrl)
+        ];
+
+        var tryProxy = function(index) {
+            if (index >= proxies.length) {
+                statusEl.style.background = '#ffebee';
+                statusEl.style.color = '#c62828';
+                statusEl.innerHTML = 'Gagal mengambil data. Pastikan Sheet di-publish ke web (CSV).';
+                return;
+            }
+
+            fetch(proxies[index])
+                .then(res => { if (!res.ok) throw Error(); return res.text(); })
+                .then(content => {
+                    if (content.startsWith('<!DOCTYPE')) throw Error();
+                    processSalesMasterCsv(content, statusEl);
+                })
+                .catch(() => tryProxy(index + 1));
+        };
+
+        tryProxy(0);
+    }
+
+    // ============ auto sync stok gudang ============
+    function autoSyncStok(source) {
+        source = source || 'google';
+        var statusEl = document.getElementById('autoSyncStatus');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3e0';
+        statusEl.style.color = '#e65100';
+
+        if (source === 'google') {
+            statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+            // Tambahkan cachebuster (t=...) agar browser tidak mengambil data lama
+            var googleUrl = 'https://docs.google.com/spreadsheets/d/' + GOOGLE_SHEET_ID + '/export?format=csv&gid=' + GOOGLE_SHEET_GID + '&t=' + new Date().getTime();
+
+            var proxies = [
+                'https://corsproxy.io/?' + encodeURIComponent(googleUrl),
+                'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(googleUrl),
+                'https://cors-anywhere.herokuapp.com/' + googleUrl
+            ];
+
+            var tryNextProxy = function(proxyIndex) {
+                if (proxyIndex >= proxies.length) {
+                    statusEl.style.background = '#ffebee';
+                    statusEl.style.color = '#c62828';
+                    statusEl.innerHTML = '<strong>? Gagal sync Google Sheet</strong><br>Semua proxy server tidak tersedia. Coba lagi nanti.';
+                    return;
+                }
+
+                fetch(proxies[proxyIndex], { timeout: 5000 })
+                    .then(function(response) {
+                        if (!response.ok) throw new Error('HTTP ' + response.status);
+                        return response.text();
+                    })
+                    .then(function(csvContent) {
+                        if (!csvContent || csvContent.length === 0) throw new Error('Konten kosong');
+                    console.log('Fetched stok sales CSV content length:', csvContent.length);
+                        if (csvContent.indexOf('<!DOCTYPE') === 0 || csvContent.indexOf('<html') === 0 || csvContent.indexOf('<') === 0) throw new Error('Invalid response');
+                        processStokGudangCsv(csvContent, statusEl);
+                    })
+                    .catch(function() {
+                        tryNextProxy(proxyIndex + 1);
+                    });
+            };
+
+            tryNextProxy(0);
+        }
+    }
+
+    // ============ auto sync stok sales ============
+    function autoSyncStokSales() {
+        var statusEl = document.getElementById('autoSyncStatusSales');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3e0';
+        statusEl.style.color = '#e65100';
+        statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+
+        // Tambahkan cachebuster (t=...) agar browser tidak mengambil data lama
+        var googleUrl = 'https://docs.google.com/spreadsheets/d/' + GOOGLE_SHEET_ID_STOK_SALES + '/export?format=csv&gid=' + GOOGLE_SHEET_GID_STOK_SALES + '&t=' + new Date().getTime();
+
+        var sources = [
+            { url: googleUrl, name: 'Direct' },
+            { url: 'https://corsproxy.io/?' + encodeURIComponent(googleUrl), name: 'Proxy 1' },
+            { url: 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(googleUrl), name: 'Proxy 2' },
+            { url: 'https://cors-anywhere.herokuapp.com/' + googleUrl, name: 'Proxy 3' }
+        ];
+
+        var tryNextSource = function(sourceIndex) {
+            if (sourceIndex >= sources.length) {
+                statusEl.style.background = '#ffebee';
+                statusEl.style.color = '#c62828';
+                statusEl.innerHTML = '<strong>Gagal Update Stok Sales</strong><br>Data stok mungkin masih valid dari sync sebelumnya. Pastikan Google Sheet dapat diakses publik dan coba lagi nanti.';
+                return;
+            }
+
+            var source = sources[sourceIndex];
+            statusEl.innerHTML = 'Mencoba mengambil data (' + source.name + ')...';
+
+            fetch(source.url, { method: 'GET', mode: 'cors', timeout: 20000 })
+                .then(function(response) {
+                    if (!response.ok) throw new Error('HTTP ' + response.status + ' (' + source.name + ')');
+                    return response.text();
+                })
+                .then(function(csvContent) {
+                    if (!csvContent || csvContent.length === 0) throw new Error('Data kosong dari ' + source.name);
+                    if (csvContent.indexOf('<!DOCTYPE') === 0 || csvContent.indexOf('<html') === 0) throw new Error('Response HTML dari ' + source.name);
+                    processStokSalesCsv(csvContent, statusEl);
+                })
+                .catch(function() {
+                    tryNextSource(sourceIndex + 1);
+                });
+        };
+
+        tryNextSource(0);
+    }
+
+    // ============ SYNC GABUNGAN ============
+    async function superSyncSemuaData() {
+        // Jalankan Sync Master (Produk & Sales)
+        autoSyncProdukMaster();
+        autoSyncMasterAll();
+
+        try { stokSalesHarian = stokSalesHarian || {}; } catch (_) {}
+
+        console.log('Running super sync all data...');
+        await new Promise(function(resolve) {
+            var statusEl = document.getElementById('autoSyncStatus');
+            if (statusEl) {
+                statusEl.style.display = 'block';
+                statusEl.style.background = '#fff3e0';
+                    console.log('Starting autoSyncStok (gudang)...');
+                statusEl.style.color = '#e65100';
+                statusEl.innerHTML = 'Sinkron Stok Gudang...';
+            }
+            autoSyncStok('google');
+            var t = setInterval(function() {
+                if (!statusEl) { clearInterval(t); resolve(); return; }
+                if (statusEl.style.background && (statusEl.style.background !== '#fff3e0')) { clearInterval(t); resolve(); }
+            }, 400);
+            setTimeout(function(){ clearInterval(t); resolve(); }, 25000);
+        });
+
+        console.log('Stok Gudang sync finished. Starting Stok Sales sync...');
+        await new Promise(function(resolve) {
+            var statusElSales = document.getElementById('autoSyncStatusSales');
+            if (statusElSales) {
+                statusElSales.style.display = 'block';
+                statusElSales.style.background = '#fff3e0';
+                console.log('Starting autoSyncStokSales...');
+                statusElSales.style.color = '#e65100';
+                statusElSales.innerHTML = 'Sinkron Stok Sales...';
+            }
+            autoSyncStokSales();
+            var t = setInterval(function() {
+                if (!statusElSales) { clearInterval(t); resolve(); return; }
+                if (statusElSales.style.background && (statusElSales.style.background !== '#fff3e0')) { clearInterval(t); resolve(); }
+            }, 400);
+            setTimeout(function(){ clearInterval(t); resolve(); }, 25000);
+        });
+
+        console.log('Combined sync finished. Rendering UI...');
+        if (typeof renderPriceList === 'function') renderPriceList();
+        renderStokGudangInfo();
+        renderSyncStokPanel();
+        renderStokSalesHeaderInfo();
+    }
+
+    // ============ VARIABEL UTAMA ============
+    let products = [];
+    let areaTerpilih = '';
+    let salesTerpilih = '';
+    let kodeSales = '';
+    let sessionLocked = false;
+    let jenisInput = 'penjualan';
+
+    const PASSWORD_ADMIN = 'wilistama18';
+    let stokLoadingSales = {};
+    
+    // Gunakan format YYYY-MM-DD agar konsisten di semua laptop/browser
+    function getTanggalISO() {
+        let d = new Date();
+        return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+    }
+    let tanggalHariIni = getTanggalISO();
+
+    // ============ ADMIN ============
+    function cekPasswordAdmin() {
+        document.getElementById('modalPasswordAdmin').style.display = 'flex';
+        document.getElementById('adminPasswordInput').value = '';
+        document.getElementById('adminPasswordInput').focus();
+    }
+    function verifikasiPassword() {
+        let password = document.getElementById('adminPasswordInput').value;
+        if (password === PASSWORD_ADMIN) {
+            document.getElementById('modalPasswordAdmin').style.display = 'none';
+            document.getElementById('pilihJenisCard').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            renderTabelAdmin();
+        } else {
+            alert('PASSWORD SALAH!');
+        }
+    }
+    function tutupModalPassword() { document.getElementById('modalPasswordAdmin').style.display = 'none'; }
+    document.getElementById('adminPasswordInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') verifikasiPassword(); });
+
+    function renderTabelAdmin() {
+        document.getElementById('jumlahProduk').textContent = produkList.length;
+        let tbodyProduk = document.querySelector('#tabelProdukAdmin tbody');
+        tbodyProduk.innerHTML = produkList.map(function(p, i) {
+            return '<tr>' +
+                '<td>' + p.kode + '</td>' + 
+                '<td>' + p.nama + '</td>' +
+                '<td>Rp ' + p.harga.toLocaleString('id-ID') + '</td>' +
+                '<td>' +
+                    '<button class="btn btn-reset" style="padding: 6px 10px; font-size: 0.75rem; width: auto; margin-bottom: 0; margin-right: 5px;" onclick="editProdukAdmin(' + i + ')">Edit</button>' +
+                    '<button class="btn btn-hapus" onclick="hapusProdukAdmin(' + i + ')">Hapus</button>' +
+                '</td>' +
+            '</tr>';
+        }).join('');
+
+        let tbodySales = document.querySelector('#tabelSalesAdmin tbody');
+        let salesData = [];
+        for (var area in dataSales) {
+            dataSales[area].forEach(function(s) { salesData.push({area: area, kode: s.kode, nama: s.nama}); });
+        }
+        tbodySales.innerHTML = salesData.map(function(s) {
+            return '<tr>' +
+                '<td>' + s.area + '</td>' + 
+                '<td>' + s.kode + '</td>' +
+                '<td>' + s.nama + '</td>' +
+                '<td>' +
+                    '<button class="btn btn-reset" style="padding: 6px 10px; font-size: 0.75rem; width: auto; margin-bottom: 0; margin-right: 5px;" onclick="editSalesAdmin(\'' + s.area + '\', \'' + s.kode + '\')">Edit</button>' +
+                    '<button class="btn btn-hapus" onclick="hapusSalesAdmin(\'' + s.area + '\', \'' + s.kode + '\')">Hapus</button>' +
+                '</td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    function hapusProdukAdmin(index) {
+        if (confirm('Hapus produk ini?')) {
+            produkList.splice(index, 1);
+            simpanDataKeStorage();
+            renderTabelAdmin();
+            renderPriceList();
+        }
+    }
+
+    function hapusSalesAdmin(area, kode) {
+        if (confirm('Hapus sales dengan kode "' + kode + '"?')) {
+            let idx = dataSales[area].findIndex(function(s) { return s.kode === kode; });
+            if (idx > -1) dataSales[area].splice(idx, 1);
+            simpanDataKeStorage();
+            renderTabelAdmin();
+        }
+    }
+
+    function editProdukAdmin(index) {
+        editingProdukIndex = index;
+        let p = produkList[index];
+        document.getElementById('adminKodeProduk').value = p.kode;
+        document.getElementById('adminNamaProduk').value = p.nama;
+        document.getElementById('adminHargaProduk').value = p.harga;
+        
+        let btn = document.querySelector('#formTambahProduk .btn-tambah');
+        btn.textContent = 'Simpan Perubahan Produk';
+        btn.style.background = 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)';
+        
+        document.getElementById('formTambahProduk').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('formTambahProduk').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let kode = String(document.getElementById('adminKodeProduk').value || '').trim();
+        let nama = String(document.getElementById('adminNamaProduk').value || '').trim();
+        let harga = parseInt(document.getElementById('adminHargaProduk').value, 10);
+        if (!kode) return alert('Kode Produk wajib diisi!');
+        if (!nama) return alert('Nama Produk wajib diisi!');
+        if (isNaN(harga)) return alert('Harga Produk harus angka!');
+        
+        if (editingProdukIndex > -1) {
+            // Mode Update
+            produkList[editingProdukIndex] = { kode: kode, nama: nama, harga: harga };
+            editingProdukIndex = -1;
+            let btn = document.querySelector('#formTambahProduk .btn-tambah');
+            btn.textContent = 'Tambah Produk';
+            btn.style.background = '';
+            alert('Produk berhasil diperbarui!');
+        } else {
+            // Mode Tambah Baru
+            if (produkList.some(function(p){ return String(p.kode) === kode; })) return alert('Kode produk sudah ada!');
+            produkList.push({kode: kode, nama: nama, harga: harga});
+            alert('Produk "' + nama + '" berhasil ditambahkan!');
+        }
+        
+        simpanDataKeStorage();
+        document.getElementById('formTambahProduk').reset();
+        renderTabelAdmin();
+        renderPriceList();
+    });
+
+    function editSalesAdmin(area, kode) {
+        let s = dataSales[area].find(item => item.kode === kode);
+        if (!s) return;
+        
+        editingSalesOldInfo = { area: area, kode: kode };
+        
+        document.getElementById('adminArea').value = area;
+        document.getElementById('adminKodeSales').value = s.kode;
+        document.getElementById('adminNamaSales').value = s.nama;
+        
+        let btn = document.querySelector('#formTambahSales .btn-tambah');
+        btn.textContent = 'Simpan Perubahan Sales';
+        btn.style.background = 'linear-gradient(135deg, #ff9800 0%, #f57c00 100%)';
+        
+        document.getElementById('formTambahSales').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.getElementById('formTambahSales').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let area = document.getElementById('adminArea').value;
+        let kode = String(document.getElementById('adminKodeSales').value || '').trim().replace(/^0+/, '');
+        let nama = document.getElementById('adminNamaSales').value;
+
+        if (!area) return alert('Pilih area terlebih dahulu!');
+        if (!kode) return alert('Kode sales wajib diisi!');
+        if (!nama) return alert('Nama sales wajib diisi!');
+        if (!/^[0-9]{3,4}$/.test(kode)) return alert('Kode sales harus 3 sampai 4 digit angka!');
+
+        if (!dataSales[area]) dataSales[area] = [];
+
+        if (editingSalesOldInfo) {
+            // Mode Update
+            // Hapus data lama dari area asalnya
+            let oldArea = editingSalesOldInfo.area;
+            let idx = dataSales[oldArea].findIndex(s => s.kode === editingSalesOldInfo.kode);
+            if (idx > -1) dataSales[oldArea].splice(idx, 1);
+            
+            // Tambah data baru ke area yang dipilih
+            if (!dataSales[area]) dataSales[area] = [];
+            dataSales[area].push({ kode: kode, nama: nama });
+            
+            editingSalesOldInfo = null;
+            let btn = document.querySelector('#formTambahSales .btn-tambah');
+            btn.textContent = 'Tambah Sales';
+            btn.style.background = '';
+            alert('Data sales berhasil diperbarui!');
+        } else {
+            // Mode Tambah Baru
+            for (const a in dataSales) {
+                if (dataSales[a] && dataSales[a].some(function(s){ return String(s.kode) === String(kode); })) {
+                    return alert('Kode sales "' + kode + '" sudah digunakan.');
+                }
+            }
+            dataSales[area].push({kode: kode, nama: nama});
+            alert('Sales "' + nama + '" (kode: ' + kode + ') berhasil ditambahkan di ' + area + '!');
+        }
+
+        simpanDataKeStorage();
+        document.getElementById('formTambahSales').reset();
+        renderTabelAdmin();
+    });
+
+    // ============ UPLOAD PRODUK CSV ============
+    document.getElementById('formUploadProdukCsv').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let fileInput = document.getElementById('fileCsvProduk');
+        let file = fileInput.files[0];
+        if (!file) return alert('Pilih file CSV terlebih dahulu!');
+
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            let csvContent = event.target.result;
+            let lines = csvContent.split('\n');
+            let updated = 0;
+            let skipped = 0;
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line || (i === 0 && line.toLowerCase().includes('kode'))) continue;
+
+                let parts = line.split(',');
+                if (parts.length >= 3) {
+                    let kode = parts[0].trim();
+                    let nama = parts[1].trim();
+                    let harga = parseInt(parts[2].trim());
+
+                    if (kode && nama && !isNaN(harga)) {
+                        if (!produkList.some(p => String(p.kode) === String(kode))) {
+                            produkList.push({kode: kode, nama: nama, harga: harga});
+                            updated++;
+                        } else { skipped++; }
+                    }
+                }
+            }
+            if (updated > 0) {
+                simpanDataKeStorage();
+                renderTabelAdmin();
+                renderPriceList();
+                alert('Berhasil upload ' + updated + ' produk baru!' + (skipped > 0 ? '\n' + skipped + ' item dilewati karena kode sudah ada.' : ''));
+            } else { alert('Tidak ada produk baru yang ditambahkan. Cek format file kamu.'); }
+            fileInput.value = '';
+        };
+        reader.readAsText(file);
+    });
+
+    function downloadTemplateProduk() {
+        let csvContent = 'kode_produk,nama_produk,harga\n410999,CONTOH PRODUK BARU,25000';
+        let blob = new Blob([csvContent], { type: 'text/csv' });
+        let link = document.createElement('a');
+        link.download = 'template_tambah_produk.csv';
+        link.href = window.URL.createObjectURL(blob);
+        link.click();
+    }
+
+    // ============ UPLOAD SALES CSV ============
+    document.getElementById('formUploadSalesCsv').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let fileInput = document.getElementById('fileCsvSales');
+        let file = fileInput.files[0];
+        if (!file) return alert('Pilih file CSV terlebih dahulu!');
+
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            let csvContent = event.target.result;
+            let lines = csvContent.split('\n');
+            let updated = 0;
+            let errorLines = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (!line || (i === 0 && line.toLowerCase().includes('area'))) continue;
+
+                let parts = line.split(',');
+                if (parts.length >= 3) {
+                    let area = parts[0].trim();
+                    let kode = parts[1].trim().replace(/^0+/, '');
+                    let nama = parts[2].trim();
+
+                    if (!dataSales[area]) { errorLines.push('Baris ' + (i+1) + ': Area "' + area + '" tidak dikenal'); continue; }
+                    if (!/^[0-9]{3,4}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sales harus 3-4 digit angka'); continue; }
+                    
+                    let exists = false;
+                    for (let a in dataSales) { if (dataSales[a].some(s => String(s.kode) === String(kode))) { exists = true; break; } }
+                    
+                    if (!exists) {
+                        dataSales[area].push({kode: kode, nama: nama});
+                        updated++;
+                    } else { errorLines.push('Baris ' + (i+1) + ': Kode ' + kode + ' sudah terdaftar'); }
+                }
+            }
+            if (updated > 0) {
+                simpanDataKeStorage();
+                renderTabelAdmin();
+                alert('Berhasil upload ' + updated + ' sales baru!');
+            }
+            if (errorLines.length > 0) alert('Catatan:\n' + errorLines.slice(0, 5).join('\n'));
+            fileInput.value = '';
+        };
+        reader.readAsText(file);
+    });
+
+    function downloadTemplateSales() {
+        let csvContent = 'area,kode_sales,nama_sales\nMUH KEDIRI1,0888,NAMA SALES BARU';
+        let blob = new Blob([csvContent], { type: 'text/csv' });
+        let link = document.createElement('a');
+        link.download = 'template_tambah_sales.csv';
+        link.href = window.URL.createObjectURL(blob);
+        link.click();
+    }
+
+    function keluarAdmin() {
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('pilihJenisCard').style.display = 'block';
+    }
+
+    // ============ MAIN ============
+    function pilihJenis(jenis) {
+        jenisInput = jenis;
+
+        if (jenis === 'penjualan') {
+            document.getElementById('titleProduk').textContent = 'Daftar Harga Produk';
+            document.getElementById('titleTambah').textContent = 'Tambah Produk';
+            document.getElementById('totalLabel').textContent = 'TOTAL PENJUALAN';
+            document.getElementById('btnGenerate').textContent = 'Akhiri Penjualan';
+            document.getElementById('modalTitle').textContent = 'Laporan Penjualan';
+            document.getElementById('modalTotalLabel').textContent = 'Total Penjualan';
+            document.getElementById('captureTitle').textContent = 'Laporan Penjualan';
+            document.getElementById('captureTotalLabel').textContent = 'Total Penjualan';
+        } else {
+            document.getElementById('titleProduk').textContent = 'Daftar Produk Loading';
+            document.getElementById('titleTambah').textContent = 'Tambah Loadingan';
+            document.getElementById('totalLabel').textContent = 'TOTAL LOADINGAN';
+            document.getElementById('btnGenerate').textContent = 'Akhiri Loading';
+            document.getElementById('modalTitle').textContent = 'Laporan Loadingan';
+            document.getElementById('modalTotalLabel').textContent = 'Total Loadingan';
+            document.getElementById('captureTitle').textContent = 'Laporan Loadingan';
+            document.getElementById('captureTotalLabel').textContent = 'Total Loadingan';
+        }
+
+        document.getElementById('pilihJenisCard').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        renderPriceList();
+    }
+
+    function getStok(kode) { return stokGudang[kode] || 0; }
+
+    function getStokSales(kodeSalesKey, kodeProduk) {
+        if (stokSalesHarian[tanggalHariIni] && stokSalesHarian[tanggalHariIni][kodeSalesKey]) {
+            return stokSalesHarian[tanggalHariIni][kodeSalesKey][kodeProduk] || 0;
+        }
+        return 0;
+    }
+
+    function isProdukTersedia(kode) {
+        if (jenisInput === 'penjualan') {
+            let kodeSalesCek = kodeSales;
+            if (!kodeSalesCek) {
+                let salesVal = document.getElementById('salesName').value;
+                if (salesVal && salesVal.indexOf('|') > 0) kodeSalesCek = salesVal.split('|')[0];
+            }
+            if (kodeSalesCek) return getStokSales(kodeSalesCek, kode) > 0;
+            return false;
+        }
+        if (jenisInput === 'loading') return getStok(kode) > 0;
+        return getStok(kode) > 0;
+    }
+
+    function updateTotal() {
+        let total = products.reduce(function(s, p) { return s + p.total; }, 0);
+        document.getElementById('totalSales').textContent = formatRupiah(total);
+        if (areaTerpilih && salesTerpilih) {
+            let displayText = areaTerpilih + ' - ' + salesTerpilih;
+            if (kodeSales) displayText += ' (' + kodeSales + ')';
+            document.getElementById('salesInfoDisplay').textContent = displayText;
+        }
+        document.getElementById('btnGenerate').style.display = products.length > 0 ? 'block' : 'none';
+    }
+
+    function formatRupiah(angka) { return 'Rp ' + angka.toLocaleString('id-ID'); }
+
+    function lockSession() {
+        sessionLocked = true;
+        document.getElementById('area').disabled = true;
+        document.getElementById('salesName').disabled = true;
+        document.getElementById('btnReset').style.display = 'block';
+        let badge = document.getElementById('selectedInfo');
+        badge.classList.add('locked-badge');
+        badge.textContent = areaTerpilih + ' - ' + salesTerpilih + (kodeSales ? ' (' + kodeSales + ')' : '');
+        renderPriceList();
+    }
+
+    function updateInfoBadge() {
+        let badge = document.getElementById('selectedInfo');
+        if (areaTerpilih && salesTerpilih) {
+            badge.textContent = kodeSales ? areaTerpilih + ' - ' + salesTerpilih + ' (' + kodeSales + ')' : areaTerpilih + ' - ' + salesTerpilih;
+        } else if (areaTerpilih) badge.textContent = areaTerpilih;
+        else badge.textContent = '';
+    }
+
+    function ubahArea() {
+        if (sessionLocked) return;
+        let areaSelect = document.getElementById('area');
+        let salesSelect = document.getElementById('salesName');
+        areaTerpilih = areaSelect.value;
+        salesTerpilih = '';
+        kodeSales = '';
+
+        salesSelect.innerHTML = '<option value="">-- Pilih Sales --</option>';
+        if (areaTerpilih && dataSales[areaTerpilih]) {
+            dataSales[areaTerpilih].forEach(function(sales) {
+                let option = document.createElement('option');
+                option.value = sales.kode + '|' + sales.nama;
+                option.textContent = sales.nama + ' (' + sales.kode + ')';
+                salesSelect.appendChild(option);
+            });
+        }
+        updateInfoBadge();
+        renderPriceList();
+    }
+
+    function ubahSales() {
+        if (sessionLocked) return;
+        let salesSelect = document.getElementById('salesName');
+        let selectedValue = salesSelect.value;
+        if (selectedValue && selectedValue.indexOf('|') > 0) {
+            kodeSales = selectedValue.split('|')[0];
+            salesTerpilih = selectedValue.split('|')[1];
+            updateInfoBadge();
+            renderPriceList();
+        } else {
+            kodeSales = '';
+            salesTerpilih = selectedValue;
+            updateInfoBadge();
+        }
+    }
+
+    let produkSearchQuery = '';
+    function applyProdukSearch() {
+        const inputEl = document.getElementById('produkSearchInput');
+        produkSearchQuery = (inputEl && inputEl.value) ? inputEl.value.trim().toLowerCase() : '';
+        const resetBtn = document.getElementById('btnProdukSearchReset');
+        if (resetBtn) resetBtn.style.display = produkSearchQuery ? 'block' : 'none';
+        renderPriceList();
+    }
+    function clearProdukSearch() {
+        const inputEl = document.getElementById('produkSearchInput');
+        if (inputEl) inputEl.value = '';
+        produkSearchQuery = '';
+        const resetBtn = document.getElementById('btnProdukSearchReset');
+        if (resetBtn) resetBtn.style.display = 'none';
+        renderPriceList();
+    }
+
+    function renderPriceList() {
+        const list = document.getElementById('priceList');
+        let filteredProduk = produkList;
+
+        if (produkSearchQuery) {
+            filteredProduk = filteredProduk.filter(function(p) {
+                const kode = String(p.kode || '').toLowerCase();
+                const nama = String(p.nama || '').toLowerCase();
+                return kode.indexOf(produkSearchQuery) >= 0 || nama.indexOf(produkSearchQuery) >= 0;
+            });
+        }
+
+        list.innerHTML = filteredProduk.map(function(p) {
+            let tersedia = isProdukTersedia(p.kode);
+            let disabledClass = tersedia ? '' : ' disabled';
+            let onclick = tersedia ? "pilihProduk('" + p.kode + "','" + p.nama.replace(/'/g, "\\'") + "'," + p.harga + ",this)" : '';
+
+            let stokInfo = '';
+            if (jenisInput === 'penjualan' && kodeSales) {
+                let qty = getStokSales(kodeSales, p.kode);
+                stokInfo = qty > 0 ? 'Stok Sales: ' + qty : 'TIDAK DIBAWA';
+            } else if (jenisInput === 'loading') {
+                let stok = getStok(p.kode);
+                stokInfo = stok > 0 ? 'Gudang: ' + stok + ' pcs' : '';
+            }
+
+            return '<div class="price-card' + disabledClass + '" onclick="' + onclick + '">' +
+                '<div class="kode">' + p.kode + '</div>' +
+                '<div class="product-name">' + p.nama + '</div>' +
+                '<div class="product-price">Rp ' + p.harga.toLocaleString('id-ID') + '</div>' +
+                (stokInfo ? '<div class="stok-info">' + stokInfo + '</div>' : '') +
+            '</div>';
+        }).join('');
+    }
+
+    function pilihProduk(kode, nama, harga, el) {
+        if (!isProdukTersedia(kode)) return;
+        document.getElementById('kodeBarang').value = kode;
+        document.getElementById('productName').value = nama;
+        document.getElementById('price').value = formatRupiah(harga);
+        document.getElementById('quantity').value = 1;
+        document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('selected'); });
+        if (el && el.classList) el.classList.add('selected');
+        document.getElementById('quantity').focus();
+    }
+
+    function tambahKeDaftar() {
+        if (!areaTerpilih || !salesTerpilih) return alert('Silakan pilih Area dan Sales terlebih dahulu!');
+
+        let kode = document.getElementById('kodeBarang').value;
+        let nama = document.getElementById('productName').value;
+        let quantity = parseInt(document.getElementById('quantity').value);
+        let priceText = document.getElementById('price').value.replace('Rp ', '').replace(/\./g, '');
+        let price = parseInt(priceText);
+        let total = quantity * price;
+
+        if (!kode || !nama) return alert('Silakan pilih produk dari daftar!');
+        if (!quantity || quantity <= 0) return alert('Jumlah harus lebih dari 0!');
+
+        // VALIDASI: Cegah input melebihi stok tersedia (Proteksi Manipulasi)
+        if (jenisInput === 'penjualan') {
+            let sisaStokSales = getStokSales(kodeSales, kode);
+            if (quantity > sisaStokSales) {
+                alert('❌ STOK SALES TIDAK MENCUKUPI!\nSisa stok di tas: ' + sisaStokSales + ' pcs\nJumlah yang diinput: ' + quantity + ' pcs');
+                return;
+            }
+        } else {
+            let sisaStokGudang = getStok(kode);
+            if (quantity > sisaStokGudang) {
+                alert('❌ STOK GUDANG TIDAK MENCUKUPI!\nSisa stok gudang: ' + sisaStokGudang + ' pcs\nJumlah yang diinput: ' + quantity + ' pcs');
+                return;
+            }
+        }
+
+        if (!sessionLocked) lockSession();
+
+        let existingIndex = products.findIndex(function(p) { return p.kode === kode; });
+        if (existingIndex >= 0) {
+            products[existingIndex].quantity += quantity;
+            products[existingIndex].total = products[existingIndex].quantity * products[existingIndex].price;
+        } else {
+            products.push({ kode: kode, area: areaTerpilih, sales: salesTerpilih, kodeSales: kodeSales, nama: nama, quantity: quantity, price: price, total: total });
+        }
+
+        if (jenisInput === 'penjualan') {
+            if (stokSalesHarian[tanggalHariIni] && stokSalesHarian[tanggalHariIni][kodeSales] && stokSalesHarian[tanggalHariIni][kodeSales][kode]) {
+                stokSalesHarian[tanggalHariIni][kodeSales][kode] = Math.max(0, stokSalesHarian[tanggalHariIni][kodeSales][kode] - quantity);
+            }
+        } else {
+            // loading: kurangi stok gudang
+            if (stokGudang[kode] !== undefined) stokGudang[kode] = Math.max(0, stokGudang[kode] - quantity);
+        }
+
+        renderTable();
+        updateTotal();
+        clearProdukSearch(); // Otomatis reset pencarian & fokus kursor
+        document.getElementById('productForm').reset();
+        document.getElementById('quantity').value = 1;
+    }
+
+    function renderTable() {
+        let list = document.getElementById('productList');
+        if (products.length === 0) {
+            list.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 20px;">Belum ada produk.</td></tr>';
+            return;
+        }
+        list.innerHTML = products.map(function(p, i) {
+            return '<tr>' +
+                '<td>' + (i+1) + '</td>' +
+                '<td>' + p.kode + '</td>' +
+                '<td><strong>' + p.nama + '</strong></td>' +
+                '<td>' + p.quantity + '</td>' +
+                '<td><strong>' + formatRupiah(p.total) + '</strong></td>' +
+                '<td><button class="btn btn-hapus" onclick="hapusProduk(' + i + ')">Hapus</button></td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    function hapusProduk(index) {
+        if (index < 0 || index >= products.length) return;
+        
+        // Ambil data produk yang akan dihapus
+        const p = products[index];
+        
+        // Kembalikan stok sesuai jenis input
+        if (jenisInput === 'penjualan') {
+            // Kembalikan ke stok sales
+            if (stokSalesHarian[tanggalHariIni] && stokSalesHarian[tanggalHariIni][p.kodeSales]) {
+                if (stokSalesHarian[tanggalHariIni][p.kodeSales][p.kode] !== undefined) {
+                    stokSalesHarian[tanggalHariIni][p.kodeSales][p.kode] += p.quantity;
+                } else {
+                    stokSalesHarian[tanggalHariIni][p.kodeSales][p.kode] = p.quantity;
+                }
+            }
+        } else {
+            // loading: kembalikan ke stok gudang
+            if (stokGudang[p.kode] !== undefined) {
+                stokGudang[p.kode] += p.quantity;
+            }
+        }
+
+        products.splice(index, 1);
+        renderTable();
+        updateTotal();
+        renderPriceList();
+    }
+
+    function updateJumlahStokSales() {
+        // opsional untuk UI lain; biar tidak error
+        try {
+            let el = document.getElementById('jumlahStokSales');
+            if (el) el.textContent = Object.keys(stokSalesHarian[tanggalHariIni] || {}).length;
+        } catch(_) {}
+    }
+
+    function generateLaporan() {
+        if (products.length === 0) return alert('Belum ada produk yang ditambahkan!');
+        let total = products.reduce(function(s, p) { return s + p.total; }, 0);
+        let salesDisplay = areaTerpilih + ' - ' + salesTerpilih;
+        if (kodeSales) salesDisplay += ' (' + kodeSales + ')';
+
+        // Update Tampilan Modal
+        const prefix = jenisInput === 'penjualan' ? 'Penjualan' : 'Loadingan';
+        document.getElementById('modalTitle').textContent = 'Laporan ' + prefix;
+        document.getElementById('modalTotalLabel').textContent = 'Total ' + prefix;
+        document.getElementById('laporanSales').textContent = salesDisplay;
+        document.getElementById('laporanTotal').textContent = formatRupiah(total);
+        document.getElementById('laporanDetail').innerHTML = products.map(function(p) {
+            return '<tr>' +
+                '<td>' + p.kode + '</td>' +
+                '<td>' + p.nama + '</td>' +
+                '<td>' + p.quantity + '</td>' +
+                '<td>' + formatRupiah(p.total) + '</td>' +
+            '</tr>';
+        }).join('');
+
+        // UPDATE DATA UNTUK SCREENSHOT (CAPTURE CONTENT)
+        document.getElementById('captureTitle').textContent = 'Laporan ' + prefix;
+        document.getElementById('captureTotalLabel').textContent = 'Total ' + prefix;
+        document.getElementById('laporanSalesCapture').textContent = salesDisplay;
+        document.getElementById('laporanTotalCapture').textContent = formatRupiah(total);
+        
+        let today = new Date();
+        document.getElementById('laporanTanggalCapture').textContent = today.toLocaleDateString('id-ID', { 
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+        
+        // Generate tabel 2 kolom untuk gambar
+        document.getElementById('tabelWrapper').innerHTML = bagiTabel2Kolom(products);
+
+        document.getElementById('modalLaporan').style.display = 'flex';
+    }
+
+    function tutupModal() { document.getElementById('modalLaporan').style.display = 'none'; }
+
+    function downloadGambar() {
+        let captureElement = document.getElementById('captureContent');
+        captureElement.style.display = 'block';
+        html2canvas(captureElement, { backgroundColor: '#ffffff', scale: 1.5 }).then(function(canvas) {
+            captureElement.style.display = 'none';
+            let prefix = jenisInput === 'penjualan' ? 'Penjualan' : 'Loadingan';
+            let link = document.createElement('a');
+            link.download = 'Laporan_' + prefix + '_' + salesTerpilih + '_' + new Date().toISOString().slice(0,10) + '.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    }
+
+    function resetSession() {
+        if (products.length > 0) {
+            if (!confirm('Warning! Semua data akan dihapus. Yakin mau ganti sales?')) return;
+        }
+        products = [];
+        sessionLocked = false;
+        areaTerpilih = '';
+        salesTerpilih = '';
+        kodeSales = '';
+        document.getElementById('area').disabled = false;
+        document.getElementById('area').value = '';
+        document.getElementById('salesName').disabled = false;
+        document.getElementById('salesName').innerHTML = '<option value="">-- Pilih Area dulu --</option>';
+        document.getElementById('btnReset').style.display = 'none';
+        document.getElementById('btnGenerate').style.display = 'none';
+        document.getElementById('selectedInfo').classList.remove('locked-badge');
+        document.getElementById('selectedInfo').textContent = '';
+        document.getElementById('salesInfoDisplay').textContent = '-';
+        renderTable();
+        updateTotal();
+    }
+
+    function keluarMainContent() {
+        if (products.length > 0) {
+            if (!confirm('Warning! Semua data akan dihapus. Yakin mau keluar?')) return;
+        }
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('pilihJenisCard').style.display = 'block';
+        document.getElementById('adminPanel').style.display = 'none';
+        products = [];
+        sessionLocked = false;
+        areaTerpilih = '';
+        salesTerpilih = '';
+        kodeSales = '';
+        document.getElementById('area').value = '';
+        document.getElementById('area').disabled = false;
+        document.getElementById('salesName').value = '';
+        document.getElementById('salesName').disabled = false;
+        document.getElementById('salesName').innerHTML = '<option value="">-- Pilih Area dulu --</option>';
+        document.getElementById('btnReset').style.display = 'none';
+        document.getElementById('btnGenerate').style.display = 'none';
+        document.getElementById('selectedInfo').classList.remove('locked-badge');
+        document.getElementById('selectedInfo').textContent = '';
+        document.getElementById('salesInfoDisplay').textContent = '-';
+        document.getElementById('productForm').reset();
+        document.getElementById('quantity').value = 1;
+        document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('selected'); });
+        renderTable();
+        updateTotal();
+        renderPriceList();
+    }
+
+    function bagiTabel2Kolom(data) {
+        let totalItems = data.length;
+        let itemsPerKolom = Math.ceil(totalItems / 2);
+        
+        let fontSize, paddingCell, paddingHeader;
+        if (totalItems <= 4) {
+            fontSize = '22px'; paddingCell = '14px'; paddingHeader = '18px';
+        } else if (totalItems <= 8) {
+            fontSize = '18px'; paddingCell = '12px'; paddingHeader = '16px';
+        } else if (totalItems <= 16) {
+            fontSize = '14px'; paddingCell = '10px'; paddingHeader = '14px';
+        } else if (totalItems <= 24) {
+            fontSize = '11px'; paddingCell = '8px'; paddingHeader = '12px';
+        } else {
+            fontSize = '10px'; paddingCell = '6px'; paddingHeader = '10px';
+        }
+        
+        let html = '';
+        
+        for (let kol = 0; kol < 2; kol++) {
+            let start = kol * itemsPerKolom;
+            let end = Math.min(start + itemsPerKolom, totalItems);
+            
+            if (start >= totalItems) break;
+            
+            html += '<div class="tabel-kolom">';
+            html += '<table style="font-size:' + fontSize + '; width:100%; border-collapse:collapse;">';
+            html += '<thead><tr style="background:#2196f3; color:white;">';
+            html += '<th style="padding:' + paddingHeader + '; text-align:center;">No</th>';
+            html += '<th style="padding:' + paddingHeader + '; text-align:center;">Kode</th>';
+            html += '<th style="padding:' + paddingHeader + '; text-align:center;">Produk</th>';
+            html += '<th style="padding:' + paddingHeader + '; text-align:center;">Qty</th>';
+            html += '<th style="padding:' + paddingHeader + '; text-align:center;">Total</th>';
+            html += '</tr></thead><tbody>';
+            
+            for (let i = start; i < end; i++) {
+                let p = data[i];
+                html += '<tr style="border-bottom:1px solid #ddd;">';
+                html += '<td style="padding:' + paddingCell + '; text-align:center;">' + (i+1) + '</td>';
+                html += '<td style="padding:' + paddingCell + '; text-align:center;">' + p.kode + '</td>';
+                html += '<td style="padding:' + paddingCell + '; text-align:left;">' + p.nama + '</td>';
+                html += '<td style="padding:' + paddingCell + '; text-align:center;">' + p.quantity + '</td>';
+                html += '<td style="padding:' + paddingCell + '; text-align:right;">' + formatRupiah(p.total) + '</td>';
+                html += '</tr>';
+            }
+            
+            html += '</tbody></table>';
+            html += '</div>';
+        }
+        
+        return html;
+    }
+
+    // Init UI
+    renderTable();
+    updateTotal();
+    renderPriceList();
+    renderStokSalesHeaderInfo();
+</script>
+</body>
+</html>
