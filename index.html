@@ -131,6 +131,7 @@
         .laporan-detail-wrap { display: flex; gap: 30px; justify-content: center; }
         .laporan-detail-wrap .tabel-kolom { flex: 1; min-width: 0; }
         .modal-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .capture-footer { margin-top: 30px; padding-top: 15px; border-top: 2px solid #eee; text-align: right; color: #888; font-size: 16px; font-weight: 600; }
 
         .form-row-2 { display: flex; gap: 10px; align-items: flex-end; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -288,7 +289,7 @@
                     </div>
                     <div class="input-group">
                         <label>Kode Sales</label>
-                        <input type="text" id="adminKodeSales" placeholder="Contoh: 719 (3-4 digit angka)" maxlength="4" minlength="3" pattern="[0-9]{3,4}" title="Masukkan 3 sampai 4 digit angka" required>
+                        <input type="text" id="adminKodeSales" placeholder="Contoh: 19 (2-4 digit angka)" maxlength="4" minlength="2" pattern="[0-9]{2,4}" title="Masukkan 2 sampai 4 digit angka" required>
                     </div>
                     <div class="input-group">
                         <label>Nama Sales</label>
@@ -443,8 +444,6 @@
 
     <footer>
         <p>© 2026 Mayora United Home - All Rights Reserved | v3.2 Created by Ibnu</p>
-    </footer>
-
     <div id="modalPasswordAdmin" class="modal-laporan">
         <div class="modal-content">
             <h2>Masukkan Password Admin</h2>
@@ -495,6 +494,9 @@
         <div class="laporan-box">
             <div class="laporan-title" id="captureTotalLabel">Total Penjualan</div>
             <div id="laporanTotalCapture" class="laporan-total">Rp 0</div>
+        </div>
+        <div class="capture-footer">
+            © 2026 Mayora United Home - All Rights Reserved | v3.2 Created by Ibnu
         </div>
     </div>
 </div>
@@ -899,8 +901,8 @@
             var namaCsv = parts[2].replace(/['"\uFEFF]/g, '').trim();
 
             if (!areaCsv || !kodeCsv || !namaCsv) continue;
-            if (!/^[0-9]{3,4}$/.test(kodeCsv)) {
-                errorLines.push('Baris ' + (i+1) + ': Kode sales harus 3-4 digit');
+            if (!/^[0-9]{2,4}$/.test(kodeCsv)) {
+                errorLines.push('Baris ' + (i+1) + ': Kode sales harus 2-4 digit');
                 continue;
             }
 
@@ -1307,7 +1309,7 @@
         if (!area) return alert('Pilih area terlebih dahulu!');
         if (!kode) return alert('Kode sales wajib diisi!');
         if (!nama) return alert('Nama sales wajib diisi!');
-        if (!/^[0-9]{3,4}$/.test(kode)) return alert('Kode sales harus 3 sampai 4 digit angka!');
+        if (!/^[0-9]{2,4}$/.test(kode)) return alert('Kode sales harus 2 sampai 4 digit angka!');
 
         if (!dataSales[area]) dataSales[area] = [];
 
@@ -1420,7 +1422,7 @@
                     let nama = parts[2].trim();
 
                     if (!dataSales[area]) { errorLines.push('Baris ' + (i+1) + ': Area "' + area + '" tidak dikenal'); continue; }
-                    if (!/^[0-9]{3,4}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sales harus 3-4 digit angka'); continue; }
+                    if (!/^[0-9]{2,4}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sales harus 2-4 digit angka'); continue; }
                     
                     let exists = false;
                     for (let a in dataSales) { if (dataSales[a].some(s => String(s.kode) === String(kode))) { exists = true; break; } }
