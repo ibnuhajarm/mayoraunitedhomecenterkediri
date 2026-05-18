@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="blue">
-    <meta name="apple-mobile-web-app-title" content="Mayora UH">
+    <meta name="apple-mobile-web-app-title" content="Mayora Center kediri">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#007bff">
     <link rel="manifest" href="manifest.json">
@@ -443,7 +443,7 @@
     </div>
 
     <footer>
-        <p>© 2026 Mayora United Home - All Rights Reserved | v3.2 Created by Ibnu</p>
+        <p>© 2026 Mayora United Home - All Rights Reserved | v3.3 Created by Ibnu</p>
     <div id="modalPasswordAdmin" class="modal-laporan">
         <div class="modal-content">
             <h2>Masukkan Password Admin</h2>
@@ -1598,7 +1598,7 @@
 
     function renderPriceList() {
         const list = document.getElementById('priceList');
-        let filteredProduk = produkList;
+        let filteredProduk = produkList.slice();
 
         if (produkSearchQuery) {
             filteredProduk = filteredProduk.filter(function(p) {
@@ -1607,6 +1607,15 @@
                 return kode.indexOf(produkSearchQuery) >= 0 || nama.indexOf(produkSearchQuery) >= 0;
             });
         }
+
+        // Urutkan: Produk yang tersedia (ada stok) ditampilkan di atas untuk efisiensi
+        filteredProduk.sort(function(a, b) {
+            let tersediaA = isProdukTersedia(a.kode);
+            let tersediaB = isProdukTersedia(b.kode);
+            if (tersediaA && !tersediaB) return -1;
+            if (!tersediaA && tersediaB) return 1;
+            return 0;
+        });
 
         list.innerHTML = filteredProduk.map(function(p) {
             let tersedia = isProdukTersedia(p.kode);
