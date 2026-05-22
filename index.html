@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -62,8 +62,8 @@
         .admin-section { margin-bottom: 20px; padding: 15px; background: #f5f5f5; border-radius: 10px; }
         .admin-section h3 { color: #333; font-size: 1rem; border-bottom: 2px solid #9c27b0; padding-bottom: 8px; }
         .sync-section h3 { color: #333; font-size: 1rem; border-bottom: 2px solid #ff5722; padding-bottom: 8px; }
-        .admin-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
-        .admin-table th { background: #9c27b0; color: white; padding: 8px; text-align: left; }
+        .admin-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 10px; font-size: 0.85rem; }
+        .admin-table th { background: #9c27b0; color: white; padding: 8px; text-align: left; position: sticky; top: 0; z-index: 10; }
         .admin-table td { padding: 8px; border-bottom: 1px solid #ddd; }
         .admin-table tr:hover { background: #f0f0f0; }
 
@@ -104,8 +104,8 @@
         .product-section .main-card:first-child { flex: 1.2; }
 
         .table-container { margin-top: 20px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; padding: 10px; text-align: left; font-weight: 600; font-size: 0.8rem; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0; }
+        th { background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; padding: 10px; text-align: left; font-weight: 600; font-size: 0.8rem; position: sticky; top: 0; z-index: 10; }
         td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.8rem; }
         tr:hover { background: #f5f5f5; }
 
@@ -169,6 +169,10 @@
                 <span class="btn-icon" aria-hidden="true">🔄</span>
                 <span class="btn-text">SYNC DATA</span>
             </button>
+            <button class="btn-jenis" style="background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); color: white;" onclick="bukaPricelist()">
+                <span class="btn-icon" aria-hidden="true">📋</span>
+                <span class="btn-text">Pricelist</span>
+            </button>
             <button class="btn-jenis penjualan" onclick="pilihJenis('penjualan')">
                 <span class="btn-icon" aria-hidden="true">💰</span>
                 <span class="btn-text">Input Penjualan</span>
@@ -227,6 +231,26 @@
         </div>
 
         <button class="btn btn-keluar" onclick="keluarSync()">Kembali ke Menu</button>
+    </div>
+
+    <!-- PRICELIST PANEL -->
+    <div class="main-card admin-panel" id="pricelistPanel">
+        <h2>📋 Pricelist Harga per Renceng</h2>
+        <div class="admin-section">
+            <div class="input-group">
+                <label>Cari Produk</label>
+                <input type="text" id="searchPricelist" placeholder="Ketik nama atau kode produk..." oninput="renderPricelistTable()">
+            </div>
+        </div>
+        <div class="table-container" style="max-height: 450px; overflow-y: auto;">
+            <table>
+                <thead>
+                    <tr><th>Kode</th><th>Nama Produk</th><th>Harga / Renceng</th></tr>
+                </thead>
+                <tbody id="bodyPricelist"></tbody>
+            </table>
+        </div>
+        <button class="btn btn-keluar" onclick="keluarPricelist()" style="margin-top:20px;">Kembali ke Menu Utama</button>
     </div>
 
     <!-- ADMIN PANEL -->
@@ -496,7 +520,7 @@
             <div id="laporanTotalCapture" class="laporan-total">Rp 0</div>
         </div>
         <div class="capture-footer">
-            © 2026 Mayora United Home - All Rights Reserved | v3.3 Created by Ibnu
+            © 2026 Mayora United Home - All Rights Reserved | v3.2 Created by Ibnu
         </div>
     </div>
 </div>
@@ -1833,6 +1857,40 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
         document.getElementById('salesInfoDisplay').textContent = '-';
         renderTable();
         updateTotal();
+    }
+
+    // ============ PRICELIST FUNCTIONS ============
+    function bukaPricelist() {
+        document.getElementById('pilihJenisCard').style.display = 'none';
+        document.getElementById('pricelistPanel').style.display = 'block';
+        renderPricelistTable();
+    }
+
+    function keluarPricelist() {
+        document.getElementById('pricelistPanel').style.display = 'none';
+        document.getElementById('pilihJenisCard').style.display = 'block';
+    }
+
+    function renderPricelistTable() {
+        let query = (document.getElementById('searchPricelist').value || '').toLowerCase();
+        let tbody = document.getElementById('bodyPricelist');
+        
+        let filtered = produkList.filter(function(p) {
+            return p.nama.toLowerCase().includes(query) || p.kode.toLowerCase().includes(query);
+        });
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#999;">Produk tidak ditemukan</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(function(p) {
+            return '<tr>' +
+                '<td>' + p.kode + '</td>' +
+                '<td><strong>' + p.nama + '</strong></td>' +
+                '<td style="color:#2196f3; font-weight:bold;">' + formatRupiah(p.harga) + '</td>' +
+            '</tr>';
+        }).join('');
     }
 
     function keluarMainContent() {
