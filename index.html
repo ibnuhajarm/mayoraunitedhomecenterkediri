@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -935,10 +935,20 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
                 dataSales[areaCsv] = [];
             }
 
-            // Mekanisme Timpa: Hapus data lama jika kode sudah ada (meskipun beda area)
+            // Mekanisme Cerdas: Jika sales sudah ada secara lokal, kita bisa memilih 
+            // untuk tidak menimpa namanya agar edit manual di Admin tidak hilang.
+            let existingSales = null;
+            for (let a in dataSales) {
+                let found = dataSales[a].find(s => String(s.kode) === String(kodeCsv));
+                if (found) { existingSales = found; break; }
+            }
+
+            // Hanya update jika belum ada, atau jika kamu ingin sinkronisasi paksa, 
+            // hapus pengecekan existingSales ini.
             var wasExisted = findAndRemoveSalesByCode(kodeCsv);
+            let namaFinal = existingSales ? existingSales.nama : namaCsv;
             
-            dataSales[areaCsv].push({ kode: kodeCsv, nama: namaCsv });
+            dataSales[areaCsv].push({ kode: kodeCsv, nama: namaFinal });
             
             if (wasExisted) updated++;
             else added++;
@@ -1335,8 +1345,6 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         if (!nama) return alert('Nama sales wajib diisi!');
 if (!/^[0-9]{2,5}$/.test(kode)) return alert('Kode sales harus 2-5 digit angka!');
 
-        if (!dataSales[area]) dataSales[area] = [];
-
         if (editingSalesOldInfo) {
             // Mode Update
             // Hapus data lama dari area asalnya
@@ -1352,7 +1360,7 @@ if (!/^[0-9]{2,5}$/.test(kode)) return alert('Kode sales harus 2-5 digit angka!'
             let btn = document.querySelector('#formTambahSales .btn-tambah');
             btn.textContent = 'Tambah Sales';
             btn.style.background = '';
-            alert('Data sales berhasil diperbarui!');
+            console.log('Update sales: ' + nama + ' (' + kode + ')');
         } else {
             // Mode Tambah Baru
             for (const a in dataSales) {
@@ -1360,6 +1368,7 @@ if (!/^[0-9]{2,5}$/.test(kode)) return alert('Kode sales harus 2-5 digit angka!'
                     return alert('Kode sales "' + kode + '" sudah digunakan.');
                 }
             }
+            if (!dataSales[area]) dataSales[area] = [];
             dataSales[area].push({kode: kode, nama: nama});
             alert('Sales "' + nama + '" (kode: ' + kode + ') berhasil ditambahkan di ' + area + '!');
         }
