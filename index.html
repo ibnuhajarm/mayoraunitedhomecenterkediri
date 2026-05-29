@@ -169,10 +169,6 @@
                 <span class="btn-icon" aria-hidden="true">🔄</span>
                 <span class="btn-text">SYNC DATA</span>
             </button>
-            <button class="btn-jenis" style="background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%); color: white;" onclick="bukaPricelist()">
-                <span class="btn-icon" aria-hidden="true">📋</span>
-                <span class="btn-text">Pricelist</span>
-            </button>
             <button class="btn-jenis penjualan" onclick="pilihJenis('penjualan')">
                 <span class="btn-icon" aria-hidden="true">💰</span>
                 <span class="btn-text">Input Penjualan</span>
@@ -180,6 +176,10 @@
             <button class="btn-jenis loading" onclick="pilihJenis('loading')">
                 <span class="btn-icon" aria-hidden="true">📦</span>
                 <span class="btn-text">Input Loadingan</span>
+            </button>
+            <button class="btn-jenis" style="background: linear-gradient(135deg, #607d8b 0%, #455a64 100%); color: white;" onclick="bukaStokVan()">
+                <span class="btn-icon" aria-hidden="true">🚐</span>
+                <span class="btn-text">Stok Van</span>
             </button>
             <button class="btn-jenis admin" onclick="cekPasswordAdmin()">
                 <span class="btn-icon" aria-hidden="true">🔒</span>
@@ -233,26 +233,77 @@
         <button class="btn btn-keluar" onclick="keluarSync()">Kembali ke Menu</button>
     </div>
 
-    <!-- PRICELIST PANEL -->
-    <div class="main-card admin-panel" id="pricelistPanel">
-        <h2>📋 Pricelist Harga per Renceng</h2>
+    <!-- PANEL STOK VAN & MASTER HARGA -->
+    <div class="main-card admin-panel" id="stokVanPanel">
+        <h2>🚐 Menu Stok Van & Harga</h2>
+
+        <!-- Bagian Stok Van -->
         <div class="admin-section">
-            <div class="input-group">
-                <label>Cari Produk</label>
-                <input type="text" id="searchPricelist" placeholder="Ketik nama atau kode produk..." oninput="renderPricelistTable()">
+            <h3>📦 Stok Barang dalam Van</h3>
+            <div class="admin-section" style="background: #e3f2fd; padding: 15px; border-radius: 10px; border: none;">
+                <div class="form-row-2">
+                    <div class="input-group">
+                        <label>Pilih Area</label>
+                        <select id="areaStokVan" onchange="ubahAreaStokVan()">
+                            <option value="">-- Pilih Area --</option>
+                            <option value="MUH KEDIRI1">MUH KEDIRI1</option>
+                            <option value="MUH KEDIRI2">MUH KEDIRI2</option>
+                            <option value="MUH KEDIRI3">MUH KEDIRI3</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Pilih Sales</label>
+                        <select id="salesStokVan" onchange="renderStokVanTable()">
+                            <option value="">-- Pilih Area dulu --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group" style="margin-top: 10px;">
+                    <label>Cari Produk dalam Van</label>
+                    <input type="text" id="searchStokVan" placeholder="Cari nama atau kode produk..." oninput="renderStokVanTable()">
+                </div>
+            </div>
+
+            <div class="table-container" style="max-height: 400px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama Produk</th>
+                            <th style="text-align:center;">Qty</th>
+                            <th style="text-align:right;">Harga</th>
+                            <th style="text-align:right;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyStokVan"></tbody>
+                </table>
+            </div>
+
+            <div class="total-section" style="margin-top: 15px; padding: 15px;">
+                <div class="total-label" style="font-size: 0.9rem;">TOTAL NILAI STOK VAN</div>
+                <div class="total-amount" id="totalStokVan" style="font-size: 1.8rem;">Rp 0</div>
             </div>
         </div>
-        <div class="table-container" style="max-height: 450px; overflow-y: auto;">
-            <table>
-                <thead>
-                    <tr><th>Kode</th><th>Nama Produk</th><th>Harga / Renceng</th></tr>
-                </thead>
-                <tbody id="bodyPricelist"></tbody>
-            </table>
-        </div>
-        <button class="btn btn-keluar" onclick="keluarPricelist()" style="margin-top:20px;">Kembali ke Menu Utama</button>
-    </div>
 
+        <!-- Bagian Master Harga (Pricelist) -->
+        <div class="admin-section">
+            <h3>📋 Master Harga Produk (Reference)</h3>
+            <div class="input-group">
+                <label>Cari Produk Master</label>
+                <input type="text" id="searchPricelist" placeholder="Ketik nama atau kode produk..." oninput="renderPricelistTable()">
+            </div>
+            <div class="table-container" style="max-height: 350px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr><th>Kode</th><th>Nama Produk</th><th>Harga / Renceng</th></tr>
+                    </thead>
+                    <tbody id="bodyPricelist"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <button class="btn btn-keluar" onclick="keluarStokVan()" style="margin-top:20px;">Kembali ke Menu Utama</button>
+    </div>
     <!-- ADMIN PANEL -->
     <div class="main-card admin-panel" id="adminPanel">
         <h2>Panel Admin</h2>
@@ -467,7 +518,7 @@
     </div>
 
     <footer>
-        <p>© 2026 Mayora United Home - All Rights Reserved | v3.3 Created by Ibnu</p>
+        <p>© 2026 Mayora United Home - All Rights Reserved | v3.5 Created by Ibnu</p>
     <div id="modalPasswordAdmin" class="modal-laporan">
         <div class="modal-content">
             <h2>Masukkan Password Admin</h2>
@@ -1869,18 +1920,10 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
     }
 
     // ============ PRICELIST FUNCTIONS ============
-    function bukaPricelist() {
-        document.getElementById('pilihJenisCard').style.display = 'none';
-        document.getElementById('pricelistPanel').style.display = 'block';
-        renderPricelistTable();
-    }
-
-    function keluarPricelist() {
-        document.getElementById('pricelistPanel').style.display = 'none';
-        document.getElementById('pilihJenisCard').style.display = 'block';
-    }
-
     function renderPricelistTable() {
+        const elTbody = document.getElementById('bodyPricelist');
+        if (!elTbody) return;
+
         let query = (document.getElementById('searchPricelist').value || '').toLowerCase();
         let tbody = document.getElementById('bodyPricelist');
         
@@ -1893,13 +1936,99 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
             return;
         }
 
+        // Info stok van jika ada sales yang dipilih di dropdown Van
+        let stokVanSalesMap = {};
+        let salesKodeVan = document.getElementById('salesStokVan')?.value;
+        if (salesKodeVan && stokSalesHarian[tanggalHariIni]) {
+            stokVanSalesMap = stokSalesHarian[tanggalHariIni][salesKodeVan] || {};
+        }
+
         tbody.innerHTML = filtered.map(function(p) {
+            let qtyVan = stokVanSalesMap[p.kode] || 0;
             return '<tr>' +
                 '<td>' + p.kode + '</td>' +
                 '<td><strong>' + p.nama + '</strong></td>' +
-                '<td style="color:#2196f3; font-weight:bold;">' + formatRupiah(p.harga) + '</td>' +
+                '<td style="color:#2196f3; font-weight:bold;">' + formatRupiah(p.harga) + 
+                (qtyVan > 0 ? ' <span style="color:#4caf50; font-size:0.75rem;">(Van: ' + qtyVan + ')</span>' : '') + '</td>' +
             '</tr>';
         }).join('');
+    }
+
+    // ============ STOK VAN FUNCTIONS ============
+    function bukaStokVan() {
+        document.getElementById('pilihJenisCard').style.display = 'none';
+        document.getElementById('stokVanPanel').style.display = 'block';
+
+        // Reset dropdowns dan table
+        document.getElementById('areaStokVan').value = '';
+        document.getElementById('salesStokVan').innerHTML = '<option value="">-- Pilih Area dulu --</option>';
+        document.getElementById('searchStokVan').value = '';
+        document.getElementById('searchPricelist').value = '';
+        renderStokVanTable();
+        renderPricelistTable();
+    }
+
+    function keluarStokVan() {
+        document.getElementById('stokVanPanel').style.display = 'none';
+        document.getElementById('pilihJenisCard').style.display = 'block';
+    }
+
+    function ubahAreaStokVan() {
+        let areaSelect = document.getElementById('areaStokVan');
+        let salesSelect = document.getElementById('salesStokVan');
+        let area = areaSelect.value;
+
+        salesSelect.innerHTML = '<option value="">-- Pilih Sales --</option>';
+        if (area && dataSales[area]) {
+            dataSales[area].forEach(function(sales) {
+                let option = document.createElement('option');
+                option.value = sales.kode;
+                option.textContent = sales.nama + ' (' + sales.kode + ')';
+                salesSelect.appendChild(option);
+            });
+        }
+        renderStokVanTable();
+        renderPricelistTable();
+    }
+
+    function renderStokVanTable() {
+        let query = (document.getElementById('searchStokVan').value || '').toLowerCase();
+        let tbody = document.getElementById('bodyStokVan');
+        let salesKode = document.getElementById('salesStokVan').value;
+        let html = '';
+        let totalValue = 0;
+
+        if (!salesKode) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Silakan pilih Sales terlebih dahulu.</td></tr>';
+            document.getElementById('totalStokVan').textContent = 'Rp 0';
+            return;
+        }
+
+        let stokSales = (stokSalesHarian[tanggalHariIni] && stokSalesHarian[tanggalHariIni][salesKode]) ? stokSalesHarian[tanggalHariIni][salesKode] : {};
+
+        for (let kProduk in stokSales) {
+            let qty = stokSales[kProduk];
+            if (qty <= 0) continue;
+
+            let pFound = produkList.find(p => String(p.kode) === String(kProduk));
+            let pName = pFound ? pFound.nama : "Produk " + kProduk;
+            let pHarga = pFound ? pFound.harga : 0;
+            let subtotal = qty * pHarga;
+
+            if (pName.toLowerCase().includes(query) || kProduk.includes(query)) {
+                totalValue += subtotal;
+                html += '<tr>' +
+                    '<td>' + kProduk + '</td>' +
+                    '<td><strong>' + pName + '</strong></td>' +
+                    '<td style="text-align:center; font-weight:bold;">' + qty + '</td>' +
+                    '<td style="text-align:right;">' + pHarga.toLocaleString('id-ID') + '</td>' +
+                    '<td style="text-align:right; color:#2196f3; font-weight:bold;">' + subtotal.toLocaleString('id-ID') + '</td>' +
+                '</tr>';
+            }
+        }
+        tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Tidak ada produk yang dibawa atau pencarian tidak cocok.</td></tr>';
+        document.getElementById('totalStokVan').textContent = formatRupiah(totalValue);
+        renderPricelistTable(); // Update info qty di pricelist jika ada
     }
 
     function keluarMainContent() {
@@ -1957,7 +2086,7 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
             
             if (start >= totalItems) break;
             
-            html += '<div class="tabel-kolom">';
+/*  */            html += '<div class="tabel-kolom">';
             html += '<table style="font-size:' + fontSize + '; width:100%; border-collapse:collapse;">';
             html += '<thead><tr style="background:#2196f3; color:white;">';
             html += '<th style="padding:' + paddingHeader + '; text-align:center;">No</th>';
