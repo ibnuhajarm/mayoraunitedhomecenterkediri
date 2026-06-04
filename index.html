@@ -285,6 +285,35 @@
             </div>
         </div>
 
+        <!-- Pencarian Global: Siapa yang bawa barang? -->
+        <div class="admin-section" style="background: #fff3e0; border: 2px solid #ff9800;">
+            <h3 style="color: #e65100;">🔍 Cari Siapa yang Bawa Barang?</h3>
+            <div class="input-group">
+                <label>Ketik Nama atau Kode Barang</label>
+                <input type="text" id="searchGlobalProduk" placeholder="Contoh: Torabika atau 410901..." oninput="renderCariStokGlobal()">
+            </div>
+            <div id="hasilCariGlobal" style="display:none;">
+                <div class="table-container" style="max-height: 250px; overflow-y: auto;">
+                    <table class="admin-table">
+                        <thead style="background: #ff9800;">
+                            <tr>
+                                <th>Area</th>
+                                <th>Sales</th>
+                                <th>Nama Produk</th>
+                                <th style="text-align:center;">Qty</th>
+                                <th style="text-align:right;">Total Harga</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bodyHasilCariGlobal"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 8px; text-align: right; border: 1px solid #ff9800;">
+                    <strong>Total Stok Item Ditemukan: <span id="totalGlobalQtyPcs" style="color: #e65100; font-size: 1.1rem;">0</span> pcs</strong><br>
+                    <strong>Total Nilai Stok Ditemukan: <span id="totalGlobalValue" style="color: #e65100; font-size: 1.1rem;">Rp 0</span></strong>
+                </div>
+            </div>
+        </div>
+
         <!-- Bagian Master Harga (Pricelist) -->
         <div class="admin-section">
             <h3>📋 Master Harga Produk (Reference)</h3>
@@ -1954,6 +1983,74 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
         }).join('');
     }
 
+    // ============ GLOBAL SEARCH FUNCTIONS ============
+    function renderCariStokGlobal() {
+        let query = (document.getElementById('searchGlobalProduk').value || '').toLowerCase().trim();
+        let resultDiv = document.getElementById('hasilCariGlobal');
+        let tbody = document.getElementById('bodyHasilCariGlobal');
+        let totalQtyPcsEl = document.getElementById('totalGlobalQtyPcs');
+        let totalValueEl = document.getElementById('totalGlobalValue');
+
+        if (query.length < 2) {
+            resultDiv.style.display = 'none';
+            return;
+        }
+
+        resultDiv.style.display = 'block';
+        let html = '';
+        let grandTotalQty = 0;
+        let grandTotalValue = 0;
+        let foundAny = false;
+
+        // 1. Cari semua produk yang cocok dengan query
+        let matchedProducts = produkList.filter(p => 
+            p.kode.toLowerCase().includes(query) || p.nama.toLowerCase().includes(query)
+        );
+
+        if (matchedProducts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:#999;">Produk tidak ditemukan dalam Master</td></tr>';
+            if (totalQtyPcsEl) totalQtyPcsEl.textContent = '0';
+            if (totalValueEl) totalValueEl.textContent = 'Rp 0';
+            return;
+        }
+
+        // 2. Scan stokSalesHarian untuk semua sales
+        let stokHariIni = stokSalesHarian[tanggalHariIni] || {};
+        
+        for (let area in dataSales) {
+            dataSales[area].forEach(sales => {
+                let sKode = sales.kode;
+                let sStok = stokHariIni[sKode] || {};
+                
+                matchedProducts.forEach(p => {
+                    let qty = sStok[p.kode] || 0;
+                    if (qty > 0) {
+                        foundAny = true;
+                        let subtotal = qty * p.harga;
+                        grandTotalQty += qty;
+                        grandTotalValue += subtotal;
+                        
+                        html += '<tr>' +
+                            '<td>' + area + '</td>' +
+                            '<td><strong>' + sales.nama + '</strong> (' + sKode + ')</td>' +
+                            '<td>' + p.nama + '</td>' +
+                            '<td style="text-align:center; font-weight:bold; color:#e65100;">' + qty + '</td>' +
+                            '<td style="text-align:right; font-weight:bold; color:#e65100;">' + formatRupiah(subtotal) + '</td>' +
+                        '</tr>';
+                    }
+                });
+            });
+        }
+
+        if (!foundAny) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:15px; color:#999;">Tidak ada sales yang membawa produk ini hari ini.</td></tr>';
+        } else {
+            tbody.innerHTML = html;
+        }
+        if (totalQtyPcsEl) totalQtyPcsEl.textContent = grandTotalQty;
+        if (totalValueEl) totalValueEl.textContent = formatRupiah(grandTotalValue);
+    }
+
     // ============ STOK VAN FUNCTIONS ============
     function bukaStokVan() {
         document.getElementById('pilihJenisCard').style.display = 'none';
@@ -1964,6 +2061,8 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
         document.getElementById('salesStokVan').innerHTML = '<option value="">-- Pilih Area dulu --</option>';
         document.getElementById('searchStokVan').value = '';
         document.getElementById('searchPricelist').value = '';
+        document.getElementById('searchGlobalProduk').value = '';
+        document.getElementById('hasilCariGlobal').style.display = 'none';
         renderStokVanTable();
         renderPricelistTable();
     }
