@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -358,6 +358,51 @@
             </form>
         </div>
 
+        <div class="admin-section" style="background: #e8f5e9; border: 2px solid #4caf50; padding: 15px; border-radius: 10px;">
+            <h3 style="color: #2e7d32; border-bottom: 2px solid #4caf50; padding-bottom: 8px;">⚖️ Pengaturan Program Promo & Kelipatan</h3>
+            <form id="formKelipatanLoading">
+                <div class="form-row">
+                    <div class="input-group">
+                        <label>Pilih Produk (Ketik Nama / Kode)</label>
+                        <input type="text" id="kelipatanKodeProdukInput" list="produkListDatalist" placeholder="Ketik kode atau nama produk..." required autocomplete="off">
+                        <datalist id="produkListDatalist"></datalist>
+                    </div>
+                    <div class="input-group">
+                        <label>Beli (Jumlah Bayar)</label>
+                        <input type="number" id="promoBeli" value="1" min="1" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Gratis (Jumlah Bonus)</label>
+                        <input type="number" id="promoGratis" value="0" min="0" required>
+                    </div>
+                </div>
+                <div style="font-size: 0.75rem; color: #666; margin-top: 5px;" id="promoHint">
+                    * Info: Kelipatan loading otomatis diset sebesar <strong>Beli + Gratis</strong>.<br>
+                    * Jika Gratis = 0, maka hanya berlaku kelipatan loading tanpa promo.
+                </div>
+                <button type="submit" class="btn btn-tambah" style="background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); margin-top: 15px;">Simpan Pengaturan</button>
+            </form>
+
+            <!-- Tabel Daftar Kelipatan Khusus -->
+            <div style="margin-top: 20px; border-top: 1px solid #4caf50; padding-top: 15px;">
+                <h4 style="color: #2e7d32; font-size: 0.9rem; margin-bottom: 8px;">📋 Daftar Program Promo & Kelipatan Khusus</h4>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    <table class="admin-table" id="tabelKelipatanKhusus">
+                        <thead>
+                            <tr style="background: #2e7d32; color: white;">
+                                <th>Kode</th>
+                                <th>Nama Produk</th>
+                                <th style="text-align: center;">Kelipatan</th>
+                                <th style="text-align: center;">Program Promo</th>
+                                <th style="text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <div class="admin-section">
             <h3>Upload Produk Baru (CSV)</h3>
             <div id="autoSyncStatusProdukMaster" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none;"></div>
@@ -436,7 +481,7 @@
             <h3>Daftar Produk (<span id="jumlahProduk">0</span> item)</h3>
             <div style="max-height: 300px; overflow-y: auto;">
                 <table class="admin-table" id="tabelProdukAdmin">
-                    <thead><tr><th>Kode</th><th>Nama</th><th>Harga</th><th>Aksi</th></tr></thead>
+                    <thead><tr><th>Kode</th><th>Nama</th><th>Harga</th><th>Kelipatan</th><th>Aksi</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -611,6 +656,7 @@
     // ============ DATA ============
     let produkList = [];
     let dataSales = {};
+    let kelipatanLoadingMap = {};
 
     // Variabel bantu untuk mode edit
     let editingProdukIndex = -1;
@@ -621,13 +667,16 @@
     // ============ LOCALSTORAGE (SIMPAN DATA) ============
     const STORAGE_KEY_PRODUK = 'muh_produkList';
     const STORAGE_KEY_SALES = 'muh_dataSales';
+    const STORAGE_KEY_KELIPATAN = 'muh_kelipatanLoading';
 
     function loadDataDariStorage() {
         try {
             let p = localStorage.getItem(STORAGE_KEY_PRODUK);
             let s = localStorage.getItem(STORAGE_KEY_SALES);
+            let kl = localStorage.getItem(STORAGE_KEY_KELIPATAN);
             if (p) produkList = JSON.parse(p);
             if (s) dataSales = JSON.parse(s);
+            if (kl) kelipatanLoadingMap = JSON.parse(kl);
             console.log('Data master berhasil dimuat dari storage');
         } catch(e) {
             console.error('Gagal load storage:', e);
@@ -638,6 +687,7 @@
         try {
             localStorage.setItem(STORAGE_KEY_PRODUK, JSON.stringify(produkList));
             localStorage.setItem(STORAGE_KEY_SALES, JSON.stringify(dataSales));
+            localStorage.setItem(STORAGE_KEY_KELIPATAN, JSON.stringify(kelipatanLoadingMap));
             console.log('Data master berhasil disimpan');
         } catch(e) {
             console.error('Gagal simpan storage:', e);
@@ -1306,16 +1356,27 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         document.getElementById('jumlahProduk').textContent = produkList.length;
         let tbodyProduk = document.querySelector('#tabelProdukAdmin tbody');
         tbodyProduk.innerHTML = produkList.map(function(p, i) {
+            let item = kelipatanLoadingMap[p.kode];
+            let kelipatan = 1;
+            if (item) {
+                if (typeof item === 'number') { kelipatan = item; }
+                else if (item.beli !== undefined) { kelipatan = (item.beli || 1) + (item.gratis || 0); }
+                else { kelipatan = item.kelipatan || 1; }
+            }
             return '<tr>' +
                 '<td>' + p.kode + '</td>' + 
                 '<td>' + p.nama + '</td>' +
                 '<td>Rp ' + p.harga.toLocaleString('id-ID') + '</td>' +
+                '<td>' + kelipatan + 'x</td>' +
                 '<td>' +
                     '<button class="btn btn-reset" style="padding: 6px 10px; font-size: 0.75rem; width: auto; margin-bottom: 0; margin-right: 5px;" onclick="editProdukAdmin(' + i + ')">Edit</button>' +
                     '<button class="btn btn-hapus" onclick="hapusProdukAdmin(' + i + ')">Hapus</button>' +
                 '</td>' +
             '</tr>';
         }).join('');
+
+        populateKelipatanDatalist();
+        renderTabelKelipatanKhusus();
 
         let tbodySales = document.querySelector('#tabelSalesAdmin tbody');
         let salesData = [];
@@ -1396,6 +1457,115 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         renderTabelAdmin();
         renderPriceList();
     });
+
+    // Listener untuk atur kelipatan loading saja
+    document.getElementById('formKelipatanLoading').addEventListener('submit', function(e) {
+        e.preventDefault();
+        let kodeInput = document.getElementById('kelipatanKodeProdukInput').value.trim();
+        let beli = parseInt(document.getElementById('promoBeli').value, 10);
+        let gratis = parseInt(document.getElementById('promoGratis').value, 10);
+        
+        if (!kodeInput) return alert('Pilih atau ketik kode produk terlebih dahulu!');
+        if (isNaN(beli) || beli < 1) beli = 1;
+        if (isNaN(gratis) || gratis < 0) gratis = 0;
+
+        // Validasi: pastikan kode produk tersebut ada di produkList
+        let produkAda = produkList.find(p => String(p.kode) === String(kodeInput));
+        if (!produkAda) {
+            return alert('❌ Kode produk "' + kodeInput + '" tidak ditemukan di data master!\nSilakan ketik atau pilih kode produk yang valid.');
+        }
+        
+        if (beli === 1 && gratis === 0) {
+            delete kelipatanLoadingMap[kodeInput];
+        } else {
+            kelipatanLoadingMap[kodeInput] = {
+                beli: beli,
+                gratis: gratis
+            };
+        }
+        simpanDataKeStorage();
+        renderTabelAdmin();
+        renderPriceList();
+        alert('Pengaturan program promo untuk "' + produkAda.nama + '" berhasil disimpan!');
+        document.getElementById('formKelipatanLoading').reset();
+        document.getElementById('promoBeli').value = 1;
+        document.getElementById('promoGratis').value = 0;
+    });
+
+    function populateKelipatanDatalist() {
+        let datalist = document.getElementById('produkListDatalist');
+        if (!datalist) return;
+        datalist.innerHTML = '';
+        produkList.forEach(function(p) {
+            let option = document.createElement('option');
+            option.value = p.kode;
+            option.label = p.nama;
+            datalist.appendChild(option);
+        });
+    }
+
+    function renderTabelKelipatanKhusus() {
+        let tbody = document.querySelector('#tabelKelipatanKhusus tbody');
+        if (!tbody) return;
+        
+        let keys = Object.keys(kelipatanLoadingMap);
+        if (keys.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #999; padding: 15px;">Belum ada program promo / kelipatan khusus yang diatur.</td></tr>';
+            return;
+        }
+        
+        let html = '';
+        keys.forEach(function(kode) {
+            let item = kelipatanLoadingMap[kode];
+            let beli = 1;
+            let gratis = 0;
+            if (item) {
+                if (typeof item === 'number') { beli = item; }
+                else if (item.beli !== undefined) {
+                    beli = item.beli || 1;
+                    gratis = item.gratis || 0;
+                } else {
+                    let kelipatan = item.kelipatan || 1;
+                    if (item.promo && kelipatan > 1) {
+                        beli = kelipatan - 1;
+                        gratis = 1;
+                    } else {
+                        beli = kelipatan;
+                    }
+                }
+            }
+            
+            let kelipatan = beli + gratis;
+            let pFound = produkList.find(p => String(p.kode) === String(kode));
+            let nama = pFound ? pFound.nama : "Produk " + kode;
+            
+            let promoText = '<span style="color: #666;">Tidak Aktif</span>';
+            if (gratis > 0) {
+                promoText = '<span style="color: #4caf50; font-weight: bold;">Beli ' + beli + ' Gratis ' + gratis + '</span>';
+            }
+            
+            html += '<tr>' +
+                '<td>' + kode + '</td>' +
+                '<td style="text-align: left;"><strong>' + nama + '</strong></td>' +
+                '<td style="text-align: center; font-weight:bold;">' + kelipatan + 'x</td>' +
+                '<td style="text-align: center;">' + promoText + '</td>' +
+                '<td style="text-align: center;">' +
+                    '<button class="btn btn-hapus" style="padding: 4px 8px; font-size: 0.75rem; width: auto; margin: 0;" onclick="hapusKelipatanKhusus(\'' + kode + '\')">Hapus</button>' +
+                '</td>' +
+            '</tr>';
+        });
+        tbody.innerHTML = html;
+    }
+
+    function hapusKelipatanKhusus(kode) {
+        if (confirm('Hapus kelipatan khusus untuk produk ini?')) {
+            delete kelipatanLoadingMap[kode];
+            simpanDataKeStorage();
+            renderTabelAdmin();
+            renderPriceList();
+            alert('Kelipatan khusus berhasil dihapus!');
+        }
+    }
 
     function editSalesAdmin(area, kode) {
         let s = dataSales[area].find(item => item.kode === kode);
@@ -1758,7 +1928,22 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
         document.getElementById('kodeBarang').value = kode;
         document.getElementById('productName').value = nama;
         document.getElementById('price').value = formatRupiah(harga);
-        document.getElementById('quantity').value = 1;
+        
+        let item = kelipatanLoadingMap[kode];
+        let kelipatan = 1;
+        if (item && jenisInput === 'loading') {
+            if (typeof item === 'number') { kelipatan = item; }
+            else if (item.beli !== undefined) {
+                kelipatan = (item.beli || 1) + (item.gratis || 0);
+            } else {
+                kelipatan = item.kelipatan || 1;
+            }
+        }
+        let qtyInput = document.getElementById('quantity');
+        qtyInput.min = kelipatan;
+        qtyInput.step = kelipatan;
+        qtyInput.value = kelipatan;
+        
         document.querySelectorAll('.price-card').forEach(function(c) { c.classList.remove('selected'); });
         if (el && el.classList) el.classList.add('selected');
         document.getElementById('quantity').focus();
@@ -1777,11 +1962,79 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
         if (!kode || !nama) return alert('Silakan pilih produk dari daftar!');
         if (!quantity || quantity <= 0) return alert('Jumlah harus lebih dari 0!');
 
-        // VALIDASI: Cegah input melebihi stok tersedia (Proteksi Manipulasi)
+        // VALIDASI: Kelipatan loading jika diset
+        if (jenisInput === 'loading') {
+            let item = kelipatanLoadingMap[kode];
+            let kelipatan = 1;
+            if (item) {
+                if (typeof item === 'number') { kelipatan = item; }
+                else if (item.beli !== undefined) {
+                    kelipatan = (item.beli || 1) + (item.gratis || 0);
+                } else {
+                    kelipatan = item.kelipatan || 1;
+                }
+            }
+            if (kelipatan > 1 && quantity % kelipatan !== 0) {
+                alert('❌ JUMLAH HARUS KELIPATAN ' + kelipatan + '!\nProduk "' + nama + '" hanya bisa di-loading dalam kelipatan ' + kelipatan + ' (contoh: ' + kelipatan + ', ' + (kelipatan*2) + ', ' + (kelipatan*3) + ', dst).');
+                return;
+            }
+        }
+
+        // Hitung promo jika penjualan
+        let promoAktif = false;
+        let beli = 1;
+        let gratis = 0;
+        if (jenisInput === 'penjualan') {
+            let item = kelipatanLoadingMap[kode];
+            if (item && typeof item === 'object') {
+                if (item.beli !== undefined) {
+                    beli = item.beli || 1;
+                    gratis = item.gratis || 0;
+                    if (gratis > 0) {
+                        promoAktif = true;
+                    }
+                } else {
+                    // Old object structure
+                    let kelipatan = item.kelipatan || 1;
+                    if (item.promo && kelipatan > 1) {
+                        promoAktif = true;
+                        beli = kelipatan - 1;
+                        gratis = 1;
+                    }
+                }
+            }
+        }
+
+        // Dapatkan data eksisting di keranjang
+        let existingPaidIndex = -1;
+        let existingFreeIndex = -1;
+        
+        if (jenisInput === 'penjualan' && promoAktif) {
+            existingPaidIndex = products.findIndex(function(p) { return p.kode === kode && p.price > 0; });
+            existingFreeIndex = products.findIndex(function(p) { return p.kode === kode && p.price === 0; });
+        } else {
+            existingPaidIndex = products.findIndex(function(p) { return p.kode === kode; });
+        }
+
+        let existingPaidQty = existingPaidIndex >= 0 ? products[existingPaidIndex].quantity : 0;
+        let existingFreeQty = existingFreeIndex >= 0 ? products[existingFreeIndex].quantity : 0;
+
+        let newTotalPaidQty = existingPaidQty + quantity;
+        let newTotalFreeQty = promoAktif ? (Math.floor(newTotalPaidQty / beli) * gratis) : 0;
+        let freeQtyToAdd = newTotalFreeQty - existingFreeQty;
+
+        // VALIDASI: Cegah input melebihi stok tersedia
         if (jenisInput === 'penjualan') {
             let sisaStokSales = getStokSales(kodeSales, kode);
-            if (quantity > sisaStokSales) {
-                alert('❌ STOK SALES TIDAK MENCUKUPI!\nSisa stok di tas: ' + sisaStokSales + ' pcs\nJumlah yang diinput: ' + quantity + ' pcs');
+            let totalDibutuhkan = quantity + freeQtyToAdd;
+            if (totalDibutuhkan > sisaStokSales) {
+                let msg = '❌ STOK SALES TIDAK MENCUKUPI!\nSisa stok di tas: ' + sisaStokSales + ' pcs\n';
+                if (freeQtyToAdd > 0) {
+                    msg += 'Dibutuhkan tambahan: ' + quantity + ' pcs (Bayar) + ' + freeQtyToAdd + ' pcs (Gratis) = ' + totalDibutuhkan + ' pcs';
+                } else {
+                    msg += 'Dibutuhkan tambahan: ' + quantity + ' pcs';
+                }
+                alert(msg);
                 return;
             }
         } else {
@@ -1794,17 +2047,38 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
 
         if (!sessionLocked) lockSession();
 
-        let existingIndex = products.findIndex(function(p) { return p.kode === kode; });
-        if (existingIndex >= 0) {
-            products[existingIndex].quantity += quantity;
-            products[existingIndex].total = products[existingIndex].quantity * products[existingIndex].price;
+        if (jenisInput === 'penjualan' && promoAktif) {
+            // Update / Masukkan yang BAYAR
+            if (existingPaidIndex >= 0) {
+                products[existingPaidIndex].quantity = newTotalPaidQty;
+                products[existingPaidIndex].total = newTotalPaidQty * products[existingPaidIndex].price;
+            } else {
+                products.push({ kode: kode, area: areaTerpilih, sales: salesTerpilih, kodeSales: kodeSales, nama: "[BAYAR] " + nama, quantity: newTotalPaidQty, price: price, total: newTotalPaidQty * price });
+            }
+
+            // Update / Masukkan yang BONUS (jika ada)
+            if (newTotalFreeQty > 0) {
+                if (existingFreeIndex >= 0) {
+                    products[existingFreeIndex].quantity = newTotalFreeQty;
+                    products[existingFreeIndex].total = 0;
+                } else {
+                    products.push({ kode: kode, area: areaTerpilih, sales: salesTerpilih, kodeSales: kodeSales, nama: "[BONUS] " + nama, quantity: newTotalFreeQty, price: 0, total: 0 });
+                }
+            }
         } else {
-            products.push({ kode: kode, area: areaTerpilih, sales: salesTerpilih, kodeSales: kodeSales, nama: nama, quantity: quantity, price: price, total: total });
+            // Normal input
+            if (existingPaidIndex >= 0) {
+                products[existingPaidIndex].quantity = newTotalPaidQty;
+                products[existingPaidIndex].total = newTotalPaidQty * products[existingPaidIndex].price;
+            } else {
+                products.push({ kode: kode, area: areaTerpilih, sales: salesTerpilih, kodeSales: kodeSales, nama: nama, quantity: newTotalPaidQty, price: price, total: newTotalPaidQty * price });
+            }
         }
 
+        // Potong stok
         if (jenisInput === 'penjualan') {
             if (stokSalesHarian[tanggalHariIni] && stokSalesHarian[tanggalHariIni][kodeSales] && stokSalesHarian[tanggalHariIni][kodeSales][kode]) {
-                stokSalesHarian[tanggalHariIni][kodeSales][kode] = Math.max(0, stokSalesHarian[tanggalHariIni][kodeSales][kode] - quantity);
+                stokSalesHarian[tanggalHariIni][kodeSales][kode] = Math.max(0, stokSalesHarian[tanggalHariIni][kodeSales][kode] - (quantity + freeQtyToAdd));
             }
         } else {
             // loading: kurangi stok gudang
@@ -1839,12 +2113,47 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
     function hapusProduk(index) {
         if (index < 0 || index >= products.length) return;
         
-        // Ambil data produk yang akan dihapus
         const p = products[index];
         
-        // Kembalikan stok sesuai jenis input
+        // Cari apakah ada partner item promo (sama kodenya, satu [BAYAR] dan satu [BONUS])
+        let partnerIndex = -1;
+        if (p.nama.indexOf('[BAYAR]') === 0) {
+            partnerIndex = products.findIndex(function(item, idx) {
+                return idx !== index && item.kode === p.kode && item.nama.indexOf('[BONUS]') === 0;
+            });
+        } else if (p.nama.indexOf('[BONUS]') === 0) {
+            partnerIndex = products.findIndex(function(item, idx) {
+                return idx !== index && item.kode === p.kode && item.nama.indexOf('[BAYAR]') === 0;
+            });
+        }
+        
+        // Kembalikan stok untuk item utama
+        kembalikanStok(p);
+        
+        // Jika ada partner, kembalikan stok partner dan hapus juga
+        if (partnerIndex > -1) {
+            const partner = products[partnerIndex];
+            kembalikanStok(partner);
+            
+            // Hapus keduanya dari array (hapus index terbesar dulu agar tidak menggeser index terkecil)
+            if (partnerIndex > index) {
+                products.splice(partnerIndex, 1);
+                products.splice(index, 1);
+            } else {
+                products.splice(index, 1);
+                products.splice(partnerIndex, 1);
+            }
+        } else {
+            products.splice(index, 1);
+        }
+        
+        renderTable();
+        updateTotal();
+        renderPriceList();
+    }
+
+    function kembalikanStok(p) {
         if (jenisInput === 'penjualan') {
-            // Kembalikan ke stok sales
             if (stokSalesHarian[tanggalHariIni] && stokSalesHarian[tanggalHariIni][p.kodeSales]) {
                 if (stokSalesHarian[tanggalHariIni][p.kodeSales][p.kode] !== undefined) {
                     stokSalesHarian[tanggalHariIni][p.kodeSales][p.kode] += p.quantity;
@@ -1853,16 +2162,10 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
                 }
             }
         } else {
-            // loading: kembalikan ke stok gudang
             if (stokGudang[p.kode] !== undefined) {
                 stokGudang[p.kode] += p.quantity;
             }
         }
-
-        products.splice(index, 1);
-        renderTable();
-        updateTotal();
-        renderPriceList();
     }
 
     function updateJumlahStokSales() {
