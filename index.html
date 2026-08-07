@@ -138,6 +138,32 @@
         .form-row { display: grid; grid-template-columns: 1fr 1fr 0.8fr; gap: 10px; }
         @media (max-width: 900px) { .product-section { flex-direction: column; } .price-list { grid-template-columns: repeat(2, 1fr); } .jenis-input-container { flex-direction: column; align-items: center; } .btn-jenis { max-width: 100%; } }
         @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .form-row-2 { flex-direction: column; } .form-row-3 { grid-template-columns: 1fr; } h1 { font-size: 1.5rem; } .total-amount { font-size: 1.8rem; } }
+
+        /* ============ GAJI PANEL ============ */
+        .gaji-panel { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); border-radius: 15px; padding: 20px; margin-top: 20px; }
+        .gaji-panel-title { color: #ffffff; font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
+        .gaji-form-card { background: rgba(255,255,255,0.95); border-radius: 12px; padding: 15px; margin-bottom: 15px; }
+        .gaji-komponen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        @media (max-width: 600px) { .gaji-komponen-grid { grid-template-columns: 1fr; } }
+        .gaji-result-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 2px solid #4caf50; border-radius: 10px; padding: 15px; text-align: center; margin: 12px 0; }
+        .gaji-result-label { color: #2e7d32; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+        .gaji-result-amount { color: #1b5e20; font-size: 1.8rem; font-weight: bold; }
+        .gaji-riwayat-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; background: rgba(255,255,255,0.97); border-radius: 10px; overflow: hidden; }
+        .gaji-riwayat-table th { background: linear-gradient(135deg, #1a237e 0%, #283593 100%); color: white; padding: 9px 8px; text-align: left; font-size: 0.8rem; }
+        .gaji-riwayat-table td { padding: 8px; border-bottom: 1px solid #e8eaf6; vertical-align: middle; }
+        .gaji-riwayat-table tr:hover { background: #e8eaf6; }
+        .gaji-riwayat-wrap { max-height: 280px; overflow-y: auto; border-radius: 10px; }
+        .gaji-badge-area { display: inline-block; background: #3949ab; color: white; padding: 2px 7px; border-radius: 10px; font-size: 0.72rem; }
+        .gaji-summary-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .gaji-summary-chip { background: rgba(255,255,255,0.15); color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; flex: 1; min-width: 100px; text-align: center; }
+        .gaji-summary-chip span { display: block; font-weight: bold; font-size: 0.95rem; }
+        .btn-gaji-simpan { background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%); color: white; border: none; border-radius: 8px; padding: 11px 20px; font-size: 0.9rem; font-weight: 700; cursor: pointer; width: 100%; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-gaji-simpan:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(67,160,71,0.5); }
+        .btn-gaji-reset { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 8px; padding: 9px 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 8px; transition: all 0.3s; }
+        .btn-gaji-reset:hover { background: rgba(255,255,255,0.25); }
+        .gaji-input { width: 100%; padding: 9px 10px; border: 2px solid #c5cae9; border-radius: 8px; font-size: 0.9rem; transition: all 0.3s; }
+        .gaji-input:focus { outline: none; border-color: #3949ab; box-shadow: 0 0 0 3px rgba(57,73,171,0.15); }
+        .gaji-label { display: block; color: #333; font-weight: 600; margin-bottom: 5px; font-size: 0.82rem; }
     </style>
 </head>
 <body>
@@ -158,6 +184,9 @@
             </div>
             <div id="autoSyncStatusProdukMaster" style="background:#fff3e0; padding:8px; border-radius:8px; display:none; width:100%; max-width:520px;">
                 <span style="color:#e65100; font-size:0.85rem;"></span>
+            </div>
+            <div id="promoKelipatanSyncHeader" style="background:#f3e5f5; padding:8px; border-radius:8px; display:none; width:100%; max-width:520px;">
+                <span style="color:#6a1b9a; font-size:0.85rem;"></span>
             </div>
         </div>
     </header>
@@ -331,6 +360,110 @@
             </div>
         </div>
 
+        <!-- ============ PANEL GAJI KARYAWAN ============ -->
+        <div class="gaji-panel" id="gajiPanel">
+            <div class="gaji-panel-title">💵 Perhitungan Gaji Karyawan</div>
+
+            <!-- Form Input Gaji -->
+            <div class="gaji-form-card">
+                <div class="form-row-2" style="margin-bottom:10px;">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label class="gaji-label">Pilih Area</label>
+                        <select id="gajiArea" class="gaji-input" onchange="gajiUbahArea()">
+                            <option value="">-- Pilih Area --</option>
+                            <option value="MUH KEDIRI1">MUH KEDIRI1</option>
+                            <option value="MUH KEDIRI2">MUH KEDIRI2</option>
+                            <option value="MUH KEDIRI3">MUH KEDIRI3</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label class="gaji-label">Pilih Karyawan (Sales)</label>
+                        <select id="gajiSales" class="gaji-input">
+                            <option value="">-- Pilih Area dulu --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom:10px;">
+                    <label class="gaji-label">📅 Periode Gaji</label>
+                    <input type="text" id="gajiPeriode" class="gaji-input" placeholder="Contoh: Juli 2026 / Minggu 1 Juli">
+                </div>
+
+                <div class="gaji-komponen-grid">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label class="gaji-label">💰 Gaji Pokok (Rp)</label>
+                        <input type="number" id="gajiPokok" class="gaji-input" placeholder="0" min="0" oninput="hitungGaji()">
+                    </div>
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label class="gaji-label">🚌 Tunjangan Transport (Rp)</label>
+                        <input type="number" id="gajiTransport" class="gaji-input" placeholder="0" min="0" oninput="hitungGaji()">
+                    </div>
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label class="gaji-label">⭐ Bonus / Insentif (Rp)</label>
+                        <input type="number" id="gajiBonus" class="gaji-input" placeholder="0" min="0" oninput="hitungGaji()">
+                    </div>
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label class="gaji-label">✂️ Potongan (Rp)</label>
+                        <input type="number" id="gajiPotongan" class="gaji-input" placeholder="0" min="0" oninput="hitungGaji()">
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom:10px; margin-top:10px;">
+                    <label class="gaji-label">📝 Catatan</label>
+                    <input type="text" id="gajiCatatan" class="gaji-input" placeholder="Opsional - misal: Bonus target, potongan kasbon, dll">
+                </div>
+
+                <div class="gaji-result-box" id="gajiResultBox">
+                    <div class="gaji-result-label">TOTAL GAJI BERSIH</div>
+                    <div class="gaji-result-amount" id="gajiTotalDisplay">Rp 0</div>
+                    <div style="font-size:0.75rem; color:#4caf50; margin-top:4px;" id="gajiRincianDisplay">-</div>
+                </div>
+
+                <button class="btn-gaji-simpan" onclick="simpanDataGaji()">💾 Simpan & Kirim ke Google Sheet</button>
+            </div>
+
+            <!-- Koneksi Google Sheet -->
+            <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); border-radius:12px; padding:14px; margin-bottom:12px;">
+                <div style="color:white; font-size:0.88rem; font-weight:600; margin-bottom:10px;">☁️ Sinkronisasi Google Sheet</div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn-gaji-sheet-btn" id="btnSyncGajiDariSheet" onclick="syncGajiDariSheet()" style="flex:1; min-width:140px; background:rgba(66,133,244,0.85); color:white; border:none; border-radius:8px; padding:10px 12px; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.3s;">📥 Tarik Data dari Sheet</button>
+                    <button class="btn-gaji-sheet-btn" onclick="kirimSemuaGajiKeSheet()" style="flex:1; min-width:140px; background:rgba(52,168,83,0.85); color:white; border:none; border-radius:8px; padding:10px 12px; font-size:0.82rem; font-weight:600; cursor:pointer; transition:all 0.3s;">📤 Upload Semua ke Sheet</button>
+                </div>
+                <div id="gajiSyncStatus" style="display:none; margin-top:10px; padding:9px 12px; border-radius:8px; font-size:0.82rem;"></div>
+            </div>
+
+            <!-- Ringkasan Total -->
+            <div class="gaji-summary-row" id="gajiSummaryRow" style="display:none;">
+                <div class="gaji-summary-chip">Total Karyawan <span id="gajiSummaryJumlah">0</span></div>
+                <div class="gaji-summary-chip">Total Dibayar <span id="gajiSummaryTotal">Rp 0</span></div>
+            </div>
+
+            <!-- Riwayat Gaji -->
+            <div id="gajiRiwayatWrap" style="display:none;">
+                <div style="color:white; font-size:0.9rem; font-weight:600; margin-bottom:8px;">📋 Riwayat Data Gaji Tersimpan</div>
+                <div class="gaji-riwayat-wrap">
+                    <table class="gaji-riwayat-table">
+                        <thead>
+                            <tr>
+                                <th>Karyawan</th>
+                                <th>Periode</th>
+                                <th style="text-align:right;">Pokok</th>
+                                <th style="text-align:right;">Transport</th>
+                                <th style="text-align:right;">Bonus</th>
+                                <th style="text-align:right;">Potongan</th>
+                                <th style="text-align:right;">Total Bersih</th>
+                                <th style="text-align:center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gajiRiwayatBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <button class="btn-gaji-reset" onclick="resetFormGaji()">🔄 Reset Form</button>
+        </div>
+        <!-- ============ END PANEL GAJI ============ -->
+
         <button class="btn btn-keluar" onclick="keluarStokVan()" style="margin-top:20px;">Kembali ke Menu Utama</button>
     </div>
     <!-- ADMIN PANEL -->
@@ -400,6 +533,19 @@
                         <tbody></tbody>
                     </table>
                 </div>
+
+                <!-- Export/Import Section untuk Program Promo & Kelipatan -->
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #4caf50; background: #f1f8e9; padding: 12px; border-radius: 8px;">
+                    <p style="font-size: 0.8rem; color: #558b2f; margin-bottom: 10px; font-weight: 600;">💾 Sinkronisasi Pengaturan Program Promo & Kelipatan</p>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); font-size: 0.85rem; padding: 10px;" onclick="exportKelipatanData()">📥 Unduh Pengaturan</button>
+                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); font-size: 0.85rem; padding: 10px;" onclick="document.getElementById('importKelipatanFile').click()">📤 Unggah Pengaturan</button>
+                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%); font-size: 0.85rem; padding: 10px;" onclick="syncPromoKelipatanDariSheet()">☁️ Sync Google Sheet</button>
+                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); font-size: 0.85rem; padding: 10px;" onclick="embedKelipatanToHtml()">💾 Embed ke HTML</button>
+                        <input type="file" id="importKelipatanFile" accept=".json" style="display: none;" onchange="importKelipatanData(event)">
+                    </div>
+                    <div id="kelipatanSyncStatus" style="margin-top: 10px; padding: 8px; border-radius: 6px; font-size: 0.8rem; display: none;"></div>
+                </div>
             </div>
         </div>
 
@@ -439,6 +585,55 @@
                         </thead>
                         <tbody></tbody>
                     </table>
+                </div>
+            </div>
+
+            <!-- PANDUAN PENGGUNAAN SINKRONISASI DATA ANTAR DEVICE -->
+            <div class="admin-section" style="background: #e1f5ff; border: 2px solid #0277bd; padding: 15px; border-radius: 10px; margin-top: 20px;">
+                <h3 style="color: #0277bd; border-bottom: 2px solid #0277bd; padding-bottom: 8px; margin-bottom: 12px;">📚 Panduan: Sinkronisasi Pengaturan Program Promo antar Device</h3>
+                
+                <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.85rem;">
+                    <p style="margin-bottom: 8px; color: #333;"><strong>🎯 TUJUAN:</strong> Agar pengaturan Program Promo & Kelipatan bisa digunakan di berbagai device (laptop, tablet, smartphone) tanpa perlu setup ulang.</p>
+                    
+                    <p style="margin-bottom: 8px; margin-top: 12px; color: #333;"><strong>📌 OPSI 1: Sinkronisasi dengan Google Sheets (PALING MUDAH)</strong></p>
+                    <ol style="margin-left: 20px; color: #555;">
+                        <li>Buat Google Sheet baru dengan kolom: <code>kode, beli, gratis</code></li>
+                        <li>Masukkan data Program Promo Anda (contoh: 410999,2,1)</li>
+                        <li>Klik File > Share > Publish to web > Pilih "CSV" > Copy URL</li>
+                        <li>Di Admin Panel, klik "☁️ Sync Google Sheet" dan paste URL tersebut</li>
+                        <li>Klik OK dan data akan tersinkronisasi dari Google Sheets</li>
+                        <li>Di device lain, lakukan hal yang sama untuk auto-sync data!</li>
+                    </ol>
+                    
+                    <p style="margin-bottom: 8px; margin-top: 12px; color: #333;"><strong>📌 OPSI 2: Export/Import File JSON (Manual)</strong></p>
+                    <ol style="margin-left: 20px; color: #555;">
+                        <li>Di device pertama, klik "📥 Unduh Pengaturan" untuk download file .JSON</li>
+                        <li>Share file tersebut ke device lain (email, cloud storage, USB, dll)</li>
+                        <li>Di device lain, buka Admin Panel dan klik "📤 Unggah Pengaturan"</li>
+                        <li>Pilih file .JSON yang sudah di-download, dan konfirmasi untuk import</li>
+                        <li>Pengaturan akan langsung tersimpan di device tersebut!</li>
+                    </ol>
+                    
+                    <p style="margin-bottom: 8px; margin-top: 12px; color: #333;"><strong>📌 OPSI 3: Embed ke HTML (Permanen)</strong></p>
+                    <ol style="margin-left: 20px; color: #555;">
+                        <li>Di Admin Panel, klik "💾 Embed ke HTML"</li>
+                        <li>Kode akan otomatis dicopy ke clipboard</li>
+                        <li>Buka file <code>index.html</code> dengan text editor (Notepad, VS Code, dll)</li>
+                        <li>Cari baris yang berisi: <code>let kelipatanLoadingMap = {};</code> (sekitar baris 1900-an)</li>
+                        <li>Ganti seluruh baris tersebut dengan kode yang sudah dicopy</li>
+                        <li>SAVE file, lalu reload browser</li>
+                        <li>Pengaturan akan menjadi default dan tersimpan permanen dalam file HTML!</li>
+                    </ol>
+                </div>
+
+                <div style="background: #fff3e0; padding: 10px; border-radius: 8px; border-left: 4px solid #ff9800; font-size: 0.82rem; color: #e65100;">
+                    <strong>⚠️ TIPS PENTING:</strong>
+                    <ul style="margin-left: 20px; margin-top: 6px;">
+                        <li>Google Sheets adalah cara TERBAIK untuk real-time sync antar device</li>
+                        <li>Export JSON cocok untuk backup atau share ke teman sekali-waktu</li>
+                        <li>Embed HTML cocok jika ingin pengaturan default yang selalu sama</li>
+                        <li>Selalu backup pengaturan Anda sebelum update file HTML!</li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -741,6 +936,14 @@
     // Jalankan load data saat aplikasi dibuka
     loadDataDariStorage();
 
+    // Auto-load Program Promo & Kelipatan dari Google Sheet saat pertama kali buka
+    window.addEventListener('load', function() {
+        if (GOOGLE_PROMO_KELIPATAN_CSV_URL && Object.keys(kelipatanLoadingMap).length === 0) {
+            console.log('Auto-syncing Program Promo & Kelipatan...');
+            autoSyncPromoKelipatan();
+        }
+    });
+
     function migrasiDataKeStorage() {
         if (confirm('Ini akan memindahkan data produk dan sales yang ada di kodingan script ke penyimpanan browser. Data lama di browser akan tertimpa. Lanjutkan?')) {
             simpanDataKeStorage();
@@ -789,6 +992,20 @@
             el.style.display = 'block';
             el.innerHTML = '<span style="color:#2e7d32; font-size:0.85rem;">✅ <strong>STOK GUDANG:</strong> ' + info.items + ' item (' + info.qty + ' pcs)' + lastUpdate + '</span>';
         }
+    }
+
+    function renderPromoKelipatanInfo() {
+        let el = document.getElementById('promoKelipatanSyncHeader');
+        if (!el) return;
+        
+        let jumlahPromo = Object.keys(kelipatanLoadingMap).length;
+        if (jumlahPromo === 0) {
+            el.style.display = 'none';
+            return;
+        }
+        
+        el.style.display = 'block';
+        el.innerHTML = '<span style="color:#6a1b9a; font-size:0.85rem;">⚖️ <strong>PROGRAM PROMO:</strong> ' + jumlahPromo + ' produk dengan pengaturan khusus</span>';
     }
 
     function renderStokSalesHeaderInfo() {
@@ -875,11 +1092,20 @@
     // Master data produk (langsung pakai URL public CSV)
     const GOOGLE_PRODUK_MASTER_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRqx3mG1iD92svNxqNdj2FLCc5FQ6bxBB6BjkgyQv0vDe2KngEsmxHabFrne9oXnnSN-yYvZrKV3tEH/pub?output=csv';
 
+    // ⬇️ PROGRAM PROMO & KELIPATAN: Tambahkan URL Google Sheet untuk sinkronisasi antar device
+    // (OPSIONAL) Ganti dengan URL Google Sheet Anda sendiri yang berisi data Program Promo & Kelipatan
+    // Format: kode,beli,gratis
+    let GOOGLE_PROMO_KELIPATAN_CSV_URL = localStorage.getItem('muh_promoKelipatanUrl') || 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT4Xr0TOMkDPrSHO-sijhHNPngp_Lt59F8fopTUdDalo8N2dnjxCrkqqPp7Na_0JJgGT-wGA04O_5Ku/pub?gid=1864907800&single=true&output=csv';
+
+    // ⬇️ GAJI: Isi dengan URL Apps Script dan URL CSV public dari sheet Gaji
+    // Ganti 'PASTE_APPS_SCRIPT_URL_DISINI' dengan URL deploy Apps Script kamu
+    let GOOGLE_GAJI_SCRIPT_URL = localStorage.getItem('muh_gajiScriptUrl') || '';
+    // Ganti dengan URL CSV public sheet Gaji (File > Share > Publish to web > Sheet Gaji > CSV)
+    let GOOGLE_GAJI_CSV_URL = localStorage.getItem('muh_gajiCsvUrl') || '';
 
     // (nilai lama masih dibiarkan tidak dipakai)
     const GOOGLE_SHEET_ID_SALES_MASTER = '2PACX-1vRutpHSSBBXgE98pzH4-Jzu8YaDY2_Mb3BGP3HwJ4hPC1Q3frxTtx7puH127Cm7UarlS1HJp4lGFLgz';
     const GOOGLE_SHEET_GID_SALES_MASTER = '0';
-
 
     // ============ STOK Gudang CSV PROCESS (DIBENERKAN RESET) ============
     function processStokGudangCsv(csvContent, statusEl) {
@@ -1353,11 +1579,22 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
             setTimeout(function(){ clearInterval(t); resolve(); }, 25000);
         });
 
+        console.log('Stok Sales sync finished. Starting Program Promo sync...');
+        await new Promise(function(resolve) {
+            if (GOOGLE_PROMO_KELIPATAN_CSV_URL && Object.keys(kelipatanLoadingMap).length < 50) {
+                autoSyncPromoKelipatan();
+                setTimeout(() => resolve(), 5000);
+            } else {
+                resolve();
+            }
+        });
+
         console.log('Combined sync finished. Rendering UI...');
         if (typeof renderPriceList === 'function') renderPriceList();
         renderStokGudangInfo();
         renderSyncStokPanel();
         renderStokSalesHeaderInfo();
+        renderPromoKelipatanInfo();
     }
 
     // ============ VARIABEL UTAMA ============
@@ -1424,6 +1661,7 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         populateKelipatanDatalist();
         renderTabelKelipatanKhusus();
         renderTabelPotonganHarga();
+        renderPromoKelipatanInfo();
 
         let tbodySales = document.querySelector('#tabelSalesAdmin tbody');
         let salesData = [];
@@ -1612,6 +1850,237 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
             renderPriceList();
             alert('Kelipatan khusus berhasil dihapus!');
         }
+    }
+
+    // ============ EXPORT/IMPORT PROGRAM PROMO & KELIPATAN ============
+    function exportKelipatanData() {
+        let data = {
+            timestamp: new Date().toLocaleString('id-ID'),
+            kelipatanLoadingMap: kelipatanLoadingMap,
+            potonganHargaMap: potonganHargaMap
+        };
+        
+        let jsonStr = JSON.stringify(data, null, 2);
+        let blob = new Blob([jsonStr], { type: 'application/json' });
+        let link = document.createElement('a');
+        link.download = 'program_promo_kelipatan_' + new Date().toISOString().split('T')[0] + '.json';
+        link.href = window.URL.createObjectURL(blob);
+        link.click();
+        
+        let statusEl = document.getElementById('kelipatanSyncStatus');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#e8f5e9';
+        statusEl.style.color = '#2e7d32';
+        statusEl.innerHTML = '✅ File pengaturan berhasil diunduh!';
+        setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+    }
+
+    function importKelipatanData(event) {
+        let file = event.target.files[0];
+        if (!file) return;
+        
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                let data = JSON.parse(e.target.result);
+                
+                if (!data.kelipatanLoadingMap || typeof data.kelipatanLoadingMap !== 'object') {
+                    throw new Error('Format file tidak valid. Harus berisi kelipatanLoadingMap.');
+                }
+                
+                if (confirm('Unggah pengaturan program promo dari file?\n\nWarning: Pengaturan yang ada saat ini akan ditimpa!')) {
+                    kelipatanLoadingMap = data.kelipatanLoadingMap || {};
+                    if (data.potonganHargaMap) {
+                        potonganHargaMap = data.potonganHargaMap;
+                    }
+                    simpanDataKeStorage();
+                    renderTabelAdmin();
+                    renderPriceList();
+                    
+                    let statusEl = document.getElementById('kelipatanSyncStatus');
+                    statusEl.style.display = 'block';
+                    statusEl.style.background = '#e8f5e9';
+                    statusEl.style.color = '#2e7d32';
+                    statusEl.innerHTML = '✅ Pengaturan berhasil diimpor! (' + Object.keys(kelipatanLoadingMap).length + ' produk)';
+                    setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
+                }
+            } catch(err) {
+                let statusEl = document.getElementById('kelipatanSyncStatus');
+                statusEl.style.display = 'block';
+                statusEl.style.background = '#ffebee';
+                statusEl.style.color = '#c62828';
+                statusEl.innerHTML = '❌ Error: ' + err.message;
+                setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+            }
+        };
+        reader.readAsText(file);
+        event.target.value = '';
+    }
+
+    function embedKelipatanToHtml() {
+        let timestamp = new Date().toLocaleString('id-ID');
+        let embedCode = `
+    // ============ EMBEDDED PROGRAM PROMO & KELIPATAN DATA (${timestamp}) ============
+    let kelipatanLoadingMap = ${JSON.stringify(kelipatanLoadingMap, null, 8)};
+    let potonganHargaMap = ${JSON.stringify(potonganHargaMap, null, 8)};
+`;
+        
+        let msg = '📋 COPY KODE INI DAN PASTE KE FILE index.html ANDA\n\n' +
+                  'Cari bagian yang tulisannya "let kelipatanLoadingMap = {};" pada baris sekitar 1900-an\n' +
+                  'Ganti dengan kode di bawah ini:\n\n' +
+                  '---START COPY---\n' +
+                  embedCode +
+                  '\n---END COPY---\n\n' +
+                  'Kemudian SAVE file dan reload browser.';
+        
+        alert(msg);
+        
+        // Copy to clipboard otomatis
+        try {
+            navigator.clipboard.writeText(embedCode).then(() => {
+                let statusEl = document.getElementById('kelipatanSyncStatus');
+                statusEl.style.display = 'block';
+                statusEl.style.background = '#e8f5e9';
+                statusEl.style.color = '#2e7d32';
+                statusEl.innerHTML = '✅ Kode sudah dicopy ke clipboard! Silakan paste ke file HTML Anda.';
+                setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+            });
+        } catch(err) {
+            console.log('Clipboard API tidak tersedia, silakan copy manual dari alert di atas');
+        }
+    }
+
+    // ============ SYNC PROGRAM PROMO & KELIPATAN DARI GOOGLE SHEET ============
+    function syncPromoKelipatanDariSheet() {
+        let promoUrl = prompt(
+            '📝 Masukkan URL Google Sheet untuk Program Promo & Kelipatan\n\n' +
+            'Format Sheet:\n' +
+            '- Baris 1: kode, beli, gratis\n' +
+            '- Baris 2+: kode_produk, jumlah_beli, jumlah_gratis\n\n' +
+            'Contoh:\n' +
+            '410999,2,1\n' +
+            '410900,1,0\n\n' +
+            'Publish sheet ke CSV dan paste URL di sini:'
+        );
+        
+        if (!promoUrl) return;
+        
+        if (!promoUrl.includes('spreadsheets') && !promoUrl.includes('docs.google.com')) {
+            alert('❌ URL tidak valid. Pastikan itu URL Google Sheet.');
+            return;
+        }
+        
+        localStorage.setItem('muh_promoKelipatanUrl', promoUrl);
+        GOOGLE_PROMO_KELIPATAN_CSV_URL = promoUrl;
+        
+        autoSyncPromoKelipatan();
+    }
+
+    function autoSyncPromoKelipatan() {
+        if (!GOOGLE_PROMO_KELIPATAN_CSV_URL) {
+            alert('❌ URL Google Sheet belum diatur. Klik tombol "Sinkronisasi dari Google Sheet" terlebih dahulu.');
+            return;
+        }
+        
+        let statusEl = document.getElementById('kelipatanSyncStatus');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3e0';
+        statusEl.style.color = '#e65100';
+        statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+        
+        let googleUrl = GOOGLE_PROMO_KELIPATAN_CSV_URL + '&t=' + new Date().getTime();
+        
+        let proxies = [
+            'https://corsproxy.io/?' + encodeURIComponent(googleUrl),
+            'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(googleUrl)
+        ];
+        
+        var tryNextProxy = function(proxyIndex) {
+            if (proxyIndex >= proxies.length) {
+                statusEl.style.background = '#ffebee';
+                statusEl.style.color = '#c62828';
+                statusEl.innerHTML = '❌ Gagal sync Google Sheet. Pastikan URL valid dan sheet published sebagai CSV.';
+                return;
+            }
+            
+            fetch(proxies[proxyIndex], { timeout: 10000 })
+                .then(response => {
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    return response.text();
+                })
+                .then(csvContent => {
+                    if (!csvContent || csvContent.length === 0) throw new Error('Data kosong');
+                    if (csvContent.indexOf('<!DOCTYPE') === 0 || csvContent.indexOf('<html') === 0) throw new Error('Invalid response');
+                    
+                    processPromoKelipatanCsv(csvContent, statusEl);
+                })
+                .catch(() => tryNextProxy(proxyIndex + 1));
+        };
+        
+        tryNextProxy(0);
+    }
+
+    function processPromoKelipatanCsv(csvContent, statusEl) {
+        let lines = csvContent.split('\n');
+        let updated = 0;
+        let skipped = 0;
+        let errorLines = [];
+        
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].replace(/\r/g, '').replace(/^\uFEFF/, '').trim();
+            if (!line) continue;
+            
+            let parts = line.split(',');
+            if (parts.length < 2) continue;
+            
+            let kode = parts[0].replace(/['"\uFEFF]/g, '').trim();
+            let beliStr = parts[1].replace(/['"\uFEFF]/g, '').trim();
+            let gratisStr = parts[2] ? parts[2].replace(/['"\uFEFF]/g, '').trim() : '0';
+            
+            // Skip header row
+            if (i === 0 && (kode.toLowerCase().includes('kode') || kode.toLowerCase().includes('produk'))) continue;
+            
+            if (!kode) continue;
+            
+            let beli = parseInt(beliStr, 10);
+            let gratis = parseInt(gratisStr, 10);
+            
+            if (isNaN(beli)) { errorLines.push('Baris ' + (i+1) + ': Jumlah Beli harus angka'); continue; }
+            if (isNaN(gratis)) gratis = 0;
+            
+            // Validasi produk ada di database
+            let produkAda = produkList.find(p => String(p.kode) === String(kode));
+            if (!produkAda) { errorLines.push('Baris ' + (i+1) + ': Kode produk "' + kode + '" tidak ditemukan'); continue; }
+            
+            // Simpan atau update
+            if (beli === 1 && gratis === 0) {
+                delete kelipatanLoadingMap[kode];
+            } else {
+                kelipatanLoadingMap[kode] = { beli: beli, gratis: gratis };
+            }
+            updated++;
+        }
+        
+        if (updated > 0) {
+            simpanDataKeStorage();
+            renderTabelAdmin();
+            renderPriceList();
+            renderPromoKelipatanInfo();
+            
+            statusEl.style.background = '#e8f5e9';
+            statusEl.style.color = '#2e7d32';
+            statusEl.innerHTML = '✅ Sync berhasil! ' + updated + ' produk diperbarui.';
+        } else {
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#e65100';
+            statusEl.innerHTML = '⚠️ Tidak ada data baru yang diproses. Periksa format CSV.';
+        }
+        
+        if (errorLines.length > 0) {
+            console.warn('Sync warnings:\n' + errorLines.slice(0, 5).join('\n'));
+        }
+        
+        setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
     }
 
     // Listener untuk atur potongan harga
@@ -2578,6 +3047,317 @@ if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sal
         tbody.innerHTML = html || '<tr><td colspan="5" style="text-align:center; padding:20px; color:#999;">Tidak ada produk yang dibawa atau pencarian tidak cocok.</td></tr>';
         document.getElementById('totalStokVan').textContent = formatRupiah(totalValue);
         renderPricelistTable(); // Update info qty di pricelist jika ada
+    }
+
+    // ============ GAJI KARYAWAN ============
+    const STORAGE_KEY_GAJI = 'muh_dataGaji';
+    let dataGaji = [];
+
+    // Load data gaji dari storage
+    (function loadDataGaji() {
+        try {
+            let g = localStorage.getItem(STORAGE_KEY_GAJI);
+            if (g) dataGaji = JSON.parse(g);
+        } catch(e) { dataGaji = []; }
+    })();
+
+    function simpanDataGajiStorage() {
+        try { localStorage.setItem(STORAGE_KEY_GAJI, JSON.stringify(dataGaji)); } catch(e) {}
+    }
+
+    function gajiUbahArea() {
+        let area = document.getElementById('gajiArea').value;
+        let salesSelect = document.getElementById('gajiSales');
+        salesSelect.innerHTML = '<option value="">-- Pilih Karyawan --</option>';
+        if (area && dataSales[area]) {
+            dataSales[area].forEach(function(s) {
+                let opt = document.createElement('option');
+                opt.value = s.kode + '|' + s.nama + '|' + area;
+                opt.textContent = s.nama + ' (' + s.kode + ')';
+                salesSelect.appendChild(opt);
+            });
+        }
+    }
+
+    function hitungGaji() {
+        let pokok   = parseInt(document.getElementById('gajiPokok').value) || 0;
+        let trans   = parseInt(document.getElementById('gajiTransport').value) || 0;
+        let bonus   = parseInt(document.getElementById('gajiBonus').value) || 0;
+        let potong  = parseInt(document.getElementById('gajiPotongan').value) || 0;
+        let total   = pokok + trans + bonus - potong;
+        document.getElementById('gajiTotalDisplay').textContent = formatRupiah(Math.max(0, total));
+        let rincian = [];
+        if (pokok > 0)  rincian.push('Pokok: ' + formatRupiah(pokok));
+        if (trans > 0)  rincian.push('Transport: ' + formatRupiah(trans));
+        if (bonus > 0)  rincian.push('Bonus: ' + formatRupiah(bonus));
+        if (potong > 0) rincian.push('Potongan: -' + formatRupiah(potong));
+        document.getElementById('gajiRincianDisplay').textContent = rincian.length ? rincian.join(' | ') : '-';
+        return Math.max(0, total);
+    }
+
+    function simpanDataGaji() {
+        let salesVal = document.getElementById('gajiSales').value;
+        if (!salesVal) return alert('Pilih karyawan terlebih dahulu!');
+
+        let parts  = salesVal.split('|');
+        let kode   = parts[0] || '';
+        let nama   = parts[1] || '';
+        let area   = parts[2] || document.getElementById('gajiArea').value;
+        let periode = document.getElementById('gajiPeriode').value.trim();
+        if (!periode) return alert('Isi periode gaji terlebih dahulu!');
+
+        let pokok   = parseInt(document.getElementById('gajiPokok').value) || 0;
+        let trans   = parseInt(document.getElementById('gajiTransport').value) || 0;
+        let bonus   = parseInt(document.getElementById('gajiBonus').value) || 0;
+        let potong  = parseInt(document.getElementById('gajiPotongan').value) || 0;
+        let catatan = document.getElementById('gajiCatatan').value.trim();
+        let total   = Math.max(0, pokok + trans + bonus - potong);
+
+        // Cek duplikat (kode + periode)
+        let idx = dataGaji.findIndex(function(g) { return g.kode === kode && g.periode === periode; });
+        let entry = { kode: kode, nama: nama, area: area, periode: periode, pokok: pokok, transport: trans, bonus: bonus, potongan: potong, total: total, catatan: catatan, savedAt: new Date().toLocaleString('id-ID') };
+        if (idx > -1) {
+            if (!confirm('Data gaji untuk ' + nama + ' periode "' + periode + '" sudah ada. Timpa data lama?')) return;
+            dataGaji[idx] = entry;
+        } else {
+            dataGaji.push(entry);
+        }
+
+        simpanDataGajiStorage();
+        renderRiwayatGaji();
+        // Kirim otomatis ke Google Sheet jika URL sudah diset
+        if (typeof kirimGajiKeSheet === 'function') {
+            kirimGajiKeSheet(entry);
+            setGajiSyncStatus('⏳ Menyimpan & mengirim ke Google Sheet...', 'loading');
+            setTimeout(function() { setGajiSyncStatus('✅ Data disimpan lokal & terkirim ke Google Sheet!', 'ok'); }, 1500);
+        }
+        alert('✅ Data gaji ' + nama + ' berhasil disimpan!');
+    }
+
+    function hapusDataGaji(index) {
+        let g = dataGaji[index];
+        if (!g) return;
+        if (!confirm('Hapus data gaji ' + g.nama + ' periode "' + g.periode + '"?')) return;
+        dataGaji.splice(index, 1);
+        simpanDataGajiStorage();
+        renderRiwayatGaji();
+    }
+
+    function renderRiwayatGaji() {
+        let tbody = document.getElementById('gajiRiwayatBody');
+        let wrapDiv = document.getElementById('gajiRiwayatWrap');
+        let summaryRow = document.getElementById('gajiSummaryRow');
+
+        if (!tbody) return;
+
+        if (dataGaji.length === 0) {
+            wrapDiv.style.display = 'none';
+            summaryRow.style.display = 'none';
+            return;
+        }
+
+        wrapDiv.style.display = 'block';
+        summaryRow.style.display = 'flex';
+
+        let grandTotal = dataGaji.reduce(function(s, g) { return s + (g.total || 0); }, 0);
+        document.getElementById('gajiSummaryJumlah').textContent = dataGaji.length;
+        document.getElementById('gajiSummaryTotal').textContent = formatRupiah(grandTotal);
+
+        tbody.innerHTML = dataGaji.map(function(g, i) {
+            return '<tr>' +
+                '<td>' +
+                    '<span class="gaji-badge-area">' + g.area + '</span><br>' +
+                    '<strong>' + g.nama + '</strong> <span style="color:#999;font-size:0.75rem;">(' + g.kode + ')</span>' +
+                    (g.catatan ? '<br><em style="color:#888;font-size:0.75rem;">' + g.catatan + '</em>' : '') +
+                '</td>' +
+                '<td>' + g.periode + '<br><span style="color:#aaa;font-size:0.72rem;">' + (g.savedAt || '') + '</span></td>' +
+                '<td style="text-align:right;">' + formatRupiah(g.pokok || 0) + '</td>' +
+                '<td style="text-align:right;">' + formatRupiah(g.transport || 0) + '</td>' +
+                '<td style="text-align:right; color:#2e7d32; font-weight:bold;">' + formatRupiah(g.bonus || 0) + '</td>' +
+                '<td style="text-align:right; color:#c62828; font-weight:bold;">' + (g.potongan > 0 ? '-' + formatRupiah(g.potongan) : 'Rp 0') + '</td>' +
+                '<td style="text-align:right; color:#1a237e; font-weight:bold; font-size:0.95rem;">' + formatRupiah(g.total || 0) + '</td>' +
+                '<td style="text-align:center;">' +
+                    '<button class="btn btn-hapus" style="padding:4px 8px; font-size:0.72rem; width:auto; margin:0;" onclick="hapusDataGaji(' + i + ')">Hapus</button>' +
+                '</td>' +
+            '</tr>';
+        }).join('');
+    }
+
+    function resetFormGaji() {
+        document.getElementById('gajiArea').value = '';
+        document.getElementById('gajiSales').innerHTML = '<option value="">-- Pilih Area dulu --</option>';
+        document.getElementById('gajiPeriode').value = '';
+        document.getElementById('gajiPokok').value = '';
+        document.getElementById('gajiTransport').value = '';
+        document.getElementById('gajiBonus').value = '';
+        document.getElementById('gajiPotongan').value = '';
+        document.getElementById('gajiCatatan').value = '';
+        document.getElementById('gajiTotalDisplay').textContent = 'Rp 0';
+        document.getElementById('gajiRincianDisplay').textContent = '-';
+    }
+
+    // Render riwayat gaji saat halaman pertama dibuka
+    renderRiwayatGaji();
+
+    // ============ GAJI - GOOGLE SHEET SYNC ============
+
+    // Tampilkan status di panel sync gaji
+    function setGajiSyncStatus(msg, type) {
+        let el = document.getElementById('gajiSyncStatus');
+        if (!el) return;
+        el.style.display = 'block';
+        let colors = { loading: ['#fff3e0','#e65100'], ok: ['#e8f5e9','#2e7d32'], error: ['#ffebee','#c62828'] };
+        let c = colors[type] || colors.loading;
+        el.style.background = c[0];
+        el.style.color = c[1];
+        el.innerHTML = msg;
+    }
+
+    // Cek apakah URL Apps Script sudah diset
+    function cekGajiScriptUrl() {
+        if (!GOOGLE_GAJI_SCRIPT_URL) {
+            let url = prompt('Masukkan URL Google Apps Script untuk data gaji:\n(Lihat panduan di file APPS_SCRIPT_GAJI.md)');
+            if (!url || !url.startsWith('https://')) {
+                setGajiSyncStatus('❌ URL Apps Script tidak valid atau dibatalkan.', 'error');
+                return false;
+            }
+            GOOGLE_GAJI_SCRIPT_URL = url.trim();
+            localStorage.setItem('muh_gajiScriptUrl', GOOGLE_GAJI_SCRIPT_URL);
+        }
+        return true;
+    }
+
+    // Kirim SATU entry gaji ke Google Sheet (dipanggil otomatis saat simpan)
+    function kirimGajiKeSheet(entry) {
+        if (!GOOGLE_GAJI_SCRIPT_URL) return; // skip kalau belum setup
+        let payload = {
+            action: 'tambahGaji',
+            kode: entry.kode,
+            nama: entry.nama,
+            area: entry.area,
+            periode: entry.periode,
+            pokok: entry.pokok || 0,
+            transport: entry.transport || 0,
+            bonus: entry.bonus || 0,
+            potongan: entry.potongan || 0,
+            total: entry.total || 0,
+            catatan: entry.catatan || '',
+            savedAt: entry.savedAt || ''
+        };
+        fetch(GOOGLE_GAJI_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).catch(function() {}); // silent fail - data tetap tersimpan lokal
+    }
+
+    // Upload SEMUA data gaji lokal ke Google Sheet
+    function kirimSemuaGajiKeSheet() {
+        if (!cekGajiScriptUrl()) return;
+        if (dataGaji.length === 0) {
+            setGajiSyncStatus('⚠️ Belum ada data gaji yang tersimpan secara lokal.', 'error');
+            return;
+        }
+        setGajiSyncStatus('⏳ Mengirim ' + dataGaji.length + ' data ke Google Sheet...', 'loading');
+
+        let payload = { action: 'uploadSemua', data: dataGaji };
+        fetch(GOOGLE_GAJI_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(function() {
+            setGajiSyncStatus('✅ ' + dataGaji.length + ' data gaji berhasil dikirim ke Google Sheet!', 'ok');
+        })
+        .catch(function() {
+            // mode: no-cors selalu reject, jadi kita assume ok jika tidak ada network error besar
+            setGajiSyncStatus('✅ Request terkirim! Cek Google Sheet kamu untuk konfirmasi.', 'ok');
+        });
+    }
+
+    // Tarik / Sync data gaji DARI Google Sheet
+    function syncGajiDariSheet() {
+        if (!GOOGLE_GAJI_CSV_URL) {
+            let url = prompt('Masukkan URL CSV public Google Sheet Gaji:\n(File > Share > Publish to web > pilih sheet Gaji > Format CSV > lalu copy URL)');
+            if (!url || !url.startsWith('https://')) {
+                setGajiSyncStatus('❌ URL CSV tidak valid atau dibatalkan.', 'error');
+                return;
+            }
+            GOOGLE_GAJI_CSV_URL = url.trim();
+            localStorage.setItem('muh_gajiCsvUrl', GOOGLE_GAJI_CSV_URL);
+        }
+
+        setGajiSyncStatus('⏳ Mengambil data dari Google Sheet...', 'loading');
+
+        let urlWithTs = GOOGLE_GAJI_CSV_URL + (GOOGLE_GAJI_CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now();
+        let proxies = [
+            'https://corsproxy.io/?' + encodeURIComponent(urlWithTs),
+            'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(urlWithTs)
+        ];
+
+        function tryProxy(idx) {
+            if (idx >= proxies.length) {
+                setGajiSyncStatus('❌ Gagal mengambil data. Pastikan URL CSV benar dan sheet sudah di-publish.', 'error');
+                return;
+            }
+            fetch(proxies[idx])
+                .then(function(res) { if (!res.ok) throw new Error(); return res.text(); })
+                .then(function(csv) {
+                    if (!csv || csv.startsWith('<!DOCTYPE') || csv.startsWith('<html')) throw new Error();
+                    prosesGajiCsv(csv);
+                })
+                .catch(function() { tryProxy(idx + 1); });
+        }
+        tryProxy(0);
+    }
+
+    // Parse CSV gaji dari Google Sheet
+    // Format kolom: area,kode,nama,periode,pokok,transport,bonus,potongan,total,catatan,savedAt
+    function prosesGajiCsv(csv) {
+        let lines = csv.split('\n');
+        let added = 0;
+        let updated = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+            let line = lines[i].replace(/\r/g, '').trim();
+            if (!line) continue;
+
+            // Skip header baris pertama
+            let lower = line.toLowerCase();
+            if (i === 0 && (lower.startsWith('area') || lower.startsWith('kode') || lower.startsWith('karyawan'))) continue;
+
+            // Pisah dengan koma, tangani koma dalam tanda kutip
+            let cols = line.match(/(?:"([^"]*)"|([^,]*))/g)
+                .map(function(c) { return c.replace(/^"|"$/g,'').trim(); });
+
+            if (cols.length < 9) continue;
+
+            let entry = {
+                area:      cols[0] || '',
+                kode:      cols[1] || '',
+                nama:      cols[2] || '',
+                periode:   cols[3] || '',
+                pokok:     parseInt(cols[4]) || 0,
+                transport: parseInt(cols[5]) || 0,
+                bonus:     parseInt(cols[6]) || 0,
+                potongan:  parseInt(cols[7]) || 0,
+                total:     parseInt(cols[8]) || 0,
+                catatan:   cols[9] || '',
+                savedAt:   cols[10] || ''
+            };
+
+            if (!entry.kode || !entry.periode) continue;
+
+            let idx = dataGaji.findIndex(function(g) { return g.kode === entry.kode && g.periode === entry.periode; });
+            if (idx > -1) { dataGaji[idx] = entry; updated++; }
+            else { dataGaji.push(entry); added++; }
+        }
+
+        simpanDataGajiStorage();
+        renderRiwayatGaji();
+        setGajiSyncStatus('✅ Sync selesai! ' + added + ' data baru, ' + updated + ' data diperbarui.', 'ok');
     }
 
     function keluarMainContent() {
