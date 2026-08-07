@@ -876,12 +876,13 @@
     loadDataDariStorage();
 
     // Auto-load Program Promo & Kelipatan dari Google Sheet saat pertama kali buka
-    window.addEventListener('load', function() {
-        if (GOOGLE_PROMO_KELIPATAN_CSV_URL && Object.keys(kelipatanLoadingMap).length === 0) {
-            console.log('Auto-syncing Program Promo & Kelipatan...');
-            autoSyncPromoKelipatan();
-        }
-    });
+    // (DISABLED karena sudah terintegrasi dalam superSyncSemuaData dari tombol SYNC DATA)
+    // window.addEventListener('load', function() {
+    //     if (GOOGLE_PROMO_KELIPATAN_CSV_URL && Object.keys(kelipatanLoadingMap).length === 0) {
+    //         console.log('Auto-syncing Program Promo & Kelipatan...');
+    //         autoSyncPromoKelipatan();
+    //     }
+    // });
 
     function migrasiDataKeStorage() {
         if (confirm('Ini akan memindahkan data produk dan sales yang ada di kodingan script ke penyimpanan browser. Data lama di browser akan tertimpa. Lanjutkan?')) {
@@ -1593,7 +1594,48 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         }
     }
     function tutupModalPassword() { document.getElementById('modalPasswordAdmin').style.display = 'none'; }
-    document.getElementById('adminPasswordInput').addEventListener('keypress', function(e) { if (e.key === 'Enter') verifikasiPassword(); });
+    
+    // Pindahkan event listener ke window.load agar DOM sudah siap
+    window.addEventListener('load', function() {
+        let adminPassInput = document.getElementById('adminPasswordInput');
+        if (adminPassInput) {
+            adminPassInput.addEventListener('keypress', function(e) { 
+                if (e.key === 'Enter') verifikasiPassword(); 
+            });
+        }
+
+        // Safe event listener attachments
+        let formTambahProduk = document.getElementById('formTambahProduk');
+        if (formTambahProduk) {
+            formTambahProduk.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let kode = String(document.getElementById('adminKodeProduk').value || '').trim();
+                let nama = String(document.getElementById('adminNamaProduk').value || '').trim();
+                let harga = parseInt(document.getElementById('adminHargaProduk').value, 10);
+                if (!kode) return alert('Kode Produk wajib diisi!');
+                if (!nama) return alert('Nama Produk wajib diisi!');
+                if (isNaN(harga)) return alert('Harga Produk harus angka!');
+                
+                if (editingProdukIndex > -1) {
+                    produkList[editingProdukIndex] = { kode: kode, nama: nama, harga: harga };
+                    editingProdukIndex = -1;
+                    let btn = document.querySelector('#formTambahProduk .btn-tambah');
+                    btn.textContent = 'Tambah Produk';
+                    btn.style.background = '';
+                    alert('Produk berhasil diperbarui!');
+                } else {
+                    if (produkList.some(function(p){ return String(p.kode) === kode; })) return alert('Kode produk sudah ada!');
+                    produkList.push({kode: kode, nama: nama, harga: harga});
+                    alert('Produk "' + nama + '" berhasil ditambahkan!');
+                }
+                
+                simpanDataKeStorage();
+                document.getElementById('formTambahProduk').reset();
+                renderTabelAdmin();
+                renderPriceList();
+            });
+        }
+    });
 
     function renderTabelAdmin() {
         document.getElementById('jumlahProduk').textContent = produkList.length;
@@ -1673,35 +1715,8 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         document.getElementById('formTambahProduk').scrollIntoView({ behavior: 'smooth' });
     }
 
-    document.getElementById('formTambahProduk').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let kode = String(document.getElementById('adminKodeProduk').value || '').trim();
-        let nama = String(document.getElementById('adminNamaProduk').value || '').trim();
-        let harga = parseInt(document.getElementById('adminHargaProduk').value, 10);
-        if (!kode) return alert('Kode Produk wajib diisi!');
-        if (!nama) return alert('Nama Produk wajib diisi!');
-        if (isNaN(harga)) return alert('Harga Produk harus angka!');
-        
-        if (editingProdukIndex > -1) {
-            // Mode Update
-            produkList[editingProdukIndex] = { kode: kode, nama: nama, harga: harga };
-            editingProdukIndex = -1;
-            let btn = document.querySelector('#formTambahProduk .btn-tambah');
-            btn.textContent = 'Tambah Produk';
-            btn.style.background = '';
-            alert('Produk berhasil diperbarui!');
-        } else {
-            // Mode Tambah Baru
-            if (produkList.some(function(p){ return String(p.kode) === kode; })) return alert('Kode produk sudah ada!');
-            produkList.push({kode: kode, nama: nama, harga: harga});
-            alert('Produk "' + nama + '" berhasil ditambahkan!');
-        }
-        
-        simpanDataKeStorage();
-        document.getElementById('formTambahProduk').reset();
-        renderTabelAdmin();
-        renderPriceList();
-    });
+    // EVENT LISTENER SUDAH DIPINDAHKAN KE window.addEventListener('load') UNTUK SAFETY
+    // document.getElementById('formTambahProduk').addEventListener('submit', function(e) { ... });
 
     // Listener untuk atur kelipatan loading saja
     document.getElementById('formKelipatanLoading').addEventListener('submit', function(e) {
@@ -1938,15 +1953,19 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
 
     function autoSyncPromoKelipatan() {
         if (!GOOGLE_PROMO_KELIPATAN_CSV_URL) {
-            alert('❌ URL Google Sheet belum diatur. Klik tombol "Sinkronisasi dari Google Sheet" terlebih dahulu.');
+            console.warn('❌ URL Google Sheet untuk Program Promo belum diatur');
             return;
         }
         
         let statusEl = document.getElementById('kelipatanSyncStatus');
-        statusEl.style.display = 'block';
-        statusEl.style.background = '#fff3e0';
-        statusEl.style.color = '#e65100';
-        statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+        if (!statusEl) {
+            console.warn('⚠️ Element kelipatanSyncStatus tidak ditemukan, skip status display');
+        } else {
+            statusEl.style.display = 'block';
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#e65100';
+            statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+        }
         
         let googleUrl = GOOGLE_PROMO_KELIPATAN_CSV_URL + '&t=' + new Date().getTime();
         
@@ -1957,9 +1976,12 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         
         var tryNextProxy = function(proxyIndex) {
             if (proxyIndex >= proxies.length) {
-                statusEl.style.background = '#ffebee';
-                statusEl.style.color = '#c62828';
-                statusEl.innerHTML = '❌ Gagal sync Google Sheet. Pastikan URL valid dan sheet published sebagai CSV.';
+                if (statusEl) {
+                    statusEl.style.background = '#ffebee';
+                    statusEl.style.color = '#c62828';
+                    statusEl.innerHTML = '❌ Gagal sync Google Sheet. Pastikan URL valid dan sheet published sebagai CSV.';
+                    setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+                }
                 return;
             }
             
@@ -2027,20 +2049,26 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
             renderPriceList();
             renderPromoKelipatanInfo();
             
-            statusEl.style.background = '#e8f5e9';
-            statusEl.style.color = '#2e7d32';
-            statusEl.innerHTML = '✅ Sync berhasil! ' + updated + ' produk diperbarui.';
+            if (statusEl) {
+                statusEl.style.background = '#e8f5e9';
+                statusEl.style.color = '#2e7d32';
+                statusEl.innerHTML = '✅ Sync berhasil! ' + updated + ' produk diperbarui.';
+            }
         } else {
-            statusEl.style.background = '#fff3e0';
-            statusEl.style.color = '#e65100';
-            statusEl.innerHTML = '⚠️ Tidak ada data baru yang diproses. Periksa format CSV.';
+            if (statusEl) {
+                statusEl.style.background = '#fff3e0';
+                statusEl.style.color = '#e65100';
+                statusEl.innerHTML = '⚠️ Tidak ada data baru yang diproses. Periksa format CSV.';
+            }
         }
         
         if (errorLines.length > 0) {
             console.warn('Sync warnings:\n' + errorLines.slice(0, 5).join('\n'));
         }
         
-        setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+        if (statusEl) {
+            setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+        }
     }
 
     // Listener untuk atur potongan harga
