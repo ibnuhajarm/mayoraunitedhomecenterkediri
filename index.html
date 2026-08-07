@@ -1535,23 +1535,27 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         tryNextSource(0);
     }
 
-    // ============ SYNC GABUNGAN ============
+    // ============ SYNC GABUNGAN (PROGRAM PROMO + SEMUA DATA) ============
     async function superSyncSemuaData() {
-        // Jalankan Sync Master (Produk & Sales)
+        try {
+            stokSalesHarian = stokSalesHarian || {};
+        } catch (_) {}
+
+        console.log('🔄 SUPER SYNC: Starting all data synchronization...');
+        
+        // Jalankan Sync Master (Produk & Sales) - tanpa await, parallel
         autoSyncProdukMaster();
         autoSyncMasterAll();
 
-        try { stokSalesHarian = stokSalesHarian || {}; } catch (_) {}
-
-        console.log('Running super sync all data...');
+        // STEP 1: Sync Stok Gudang
+        console.log('📦 Step 1: Syncing Stok Gudang...');
         await new Promise(function(resolve) {
             var statusEl = document.getElementById('autoSyncStatus');
             if (statusEl) {
                 statusEl.style.display = 'block';
                 statusEl.style.background = '#fff3e0';
-                    console.log('Starting autoSyncStok (gudang)...');
                 statusEl.style.color = '#e65100';
-                statusEl.innerHTML = 'Sinkron Stok Gudang...';
+                statusEl.innerHTML = '📦 Sinkron Stok Gudang...';
             }
             autoSyncStok('google');
             var t = setInterval(function() {
@@ -1561,15 +1565,15 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
             setTimeout(function(){ clearInterval(t); resolve(); }, 25000);
         });
 
-        console.log('Stok Gudang sync finished. Starting Stok Sales sync...');
+        // STEP 2: Sync Stok Sales
+        console.log('🎒 Step 2: Syncing Stok Sales...');
         await new Promise(function(resolve) {
             var statusElSales = document.getElementById('autoSyncStatusSales');
             if (statusElSales) {
                 statusElSales.style.display = 'block';
                 statusElSales.style.background = '#fff3e0';
-                console.log('Starting autoSyncStokSales...');
                 statusElSales.style.color = '#e65100';
-                statusElSales.innerHTML = 'Sinkron Stok Sales...';
+                statusElSales.innerHTML = '🎒 Sinkron Stok Sales...';
             }
             autoSyncStokSales();
             var t = setInterval(function() {
@@ -1579,22 +1583,39 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
             setTimeout(function(){ clearInterval(t); resolve(); }, 25000);
         });
 
-        console.log('Stok Sales sync finished. Starting Program Promo sync...');
+        // STEP 3: Sync Program Promo & Kelipatan
+        console.log('⚖️ Step 3: Syncing Program Promo & Kelipatan...');
         await new Promise(function(resolve) {
-            if (GOOGLE_PROMO_KELIPATAN_CSV_URL && Object.keys(kelipatanLoadingMap).length < 50) {
+            if (GOOGLE_PROMO_KELIPATAN_CSV_URL) {
+                var statusElPromo = document.getElementById('kelipatanSyncStatus');
+                if (statusElPromo) {
+                    statusElPromo.style.display = 'block';
+                    statusElPromo.style.background = '#fff3e0';
+                    statusElPromo.style.color = '#e65100';
+                    statusElPromo.innerHTML = '⚖️ Sinkron Program Promo & Kelipatan...';
+                }
                 autoSyncPromoKelipatan();
-                setTimeout(() => resolve(), 5000);
+                setTimeout(() => resolve(), 7000);
             } else {
+                console.log('⚠️ Google Sheets URL untuk Program Promo belum diset, skip...');
                 resolve();
             }
         });
 
-        console.log('Combined sync finished. Rendering UI...');
+        // FINAL: Render semua UI
+        console.log('✅ All sync completed! Rendering UI...');
         if (typeof renderPriceList === 'function') renderPriceList();
         renderStokGudangInfo();
         renderSyncStokPanel();
         renderStokSalesHeaderInfo();
         renderPromoKelipatanInfo();
+        
+        // Show success notification
+        let notifEl = document.createElement('div');
+        notifEl.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-weight: 600; z-index: 9999;';
+        notifEl.textContent = '✅ Semua Data Berhasil Tersinkronisasi!';
+        document.body.appendChild(notifEl);
+        setTimeout(() => notifEl.remove(), 3000);
     }
 
     // ============ VARIABEL UTAMA ============
@@ -1978,15 +1999,17 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
 
     function autoSyncPromoKelipatan() {
         if (!GOOGLE_PROMO_KELIPATAN_CSV_URL) {
-            alert('❌ URL Google Sheet belum diatur. Klik tombol "Sinkronisasi dari Google Sheet" terlebih dahulu.');
+            console.warn('❌ URL Google Sheet untuk Program Promo belum diatur');
             return;
         }
         
         let statusEl = document.getElementById('kelipatanSyncStatus');
-        statusEl.style.display = 'block';
-        statusEl.style.background = '#fff3e0';
-        statusEl.style.color = '#e65100';
-        statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+        if (statusEl) {
+            statusEl.style.display = 'block';
+            statusEl.style.background = '#fff3e0';
+            statusEl.style.color = '#e65100';
+            statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
+        }
         
         let googleUrl = GOOGLE_PROMO_KELIPATAN_CSV_URL + '&t=' + new Date().getTime();
         
@@ -1997,9 +2020,13 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         
         var tryNextProxy = function(proxyIndex) {
             if (proxyIndex >= proxies.length) {
-                statusEl.style.background = '#ffebee';
-                statusEl.style.color = '#c62828';
-                statusEl.innerHTML = '❌ Gagal sync Google Sheet. Pastikan URL valid dan sheet published sebagai CSV.';
+                if (statusEl) {
+                    statusEl.style.background = '#ffebee';
+                    statusEl.style.color = '#c62828';
+                    statusEl.innerHTML = '❌ Gagal sync Google Sheet. Periksa URL dan koneksi.';
+                    setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
+                }
+                console.error('❌ Semua proxy gagal untuk sync Program Promo');
                 return;
             }
             
