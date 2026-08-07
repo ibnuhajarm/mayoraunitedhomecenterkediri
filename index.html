@@ -533,19 +533,6 @@
                         <tbody></tbody>
                     </table>
                 </div>
-
-                <!-- Export/Import Section untuk Program Promo & Kelipatan -->
-                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #4caf50; background: #f1f8e9; padding: 12px; border-radius: 8px;">
-                    <p style="font-size: 0.8rem; color: #558b2f; margin-bottom: 10px; font-weight: 600;">💾 Sinkronisasi Pengaturan Program Promo & Kelipatan</p>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%); font-size: 0.85rem; padding: 10px;" onclick="exportKelipatanData()">📥 Unduh Pengaturan</button>
-                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); font-size: 0.85rem; padding: 10px;" onclick="document.getElementById('importKelipatanFile').click()">📤 Unggah Pengaturan</button>
-                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #4285f4 0%, #1a73e8 100%); font-size: 0.85rem; padding: 10px;" onclick="syncPromoKelipatanDariSheet()">☁️ Sync Google Sheet</button>
-                        <button type="button" class="btn btn-tambah" style="flex: 1; min-width: 140px; background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%); font-size: 0.85rem; padding: 10px;" onclick="embedKelipatanToHtml()">💾 Embed ke HTML</button>
-                        <input type="file" id="importKelipatanFile" accept=".json" style="display: none;" onchange="importKelipatanData(event)">
-                    </div>
-                    <div id="kelipatanSyncStatus" style="margin-top: 10px; padding: 8px; border-radius: 6px; font-size: 0.8rem; display: none;"></div>
-                </div>
             </div>
         </div>
 
@@ -588,55 +575,7 @@
                 </div>
             </div>
 
-            <!-- PANDUAN PENGGUNAAN SINKRONISASI DATA ANTAR DEVICE -->
-            <div class="admin-section" style="background: #e1f5ff; border: 2px solid #0277bd; padding: 15px; border-radius: 10px; margin-top: 20px;">
-                <h3 style="color: #0277bd; border-bottom: 2px solid #0277bd; padding-bottom: 8px; margin-bottom: 12px;">📚 Panduan: Sinkronisasi Pengaturan Program Promo antar Device</h3>
-                
-                <div style="background: white; padding: 12px; border-radius: 8px; margin-bottom: 12px; font-size: 0.85rem;">
-                    <p style="margin-bottom: 8px; color: #333;"><strong>🎯 TUJUAN:</strong> Agar pengaturan Program Promo & Kelipatan bisa digunakan di berbagai device (laptop, tablet, smartphone) tanpa perlu setup ulang.</p>
-                    
-                    <p style="margin-bottom: 8px; margin-top: 12px; color: #333;"><strong>📌 OPSI 1: Sinkronisasi dengan Google Sheets (PALING MUDAH)</strong></p>
-                    <ol style="margin-left: 20px; color: #555;">
-                        <li>Buat Google Sheet baru dengan kolom: <code>kode, beli, gratis</code></li>
-                        <li>Masukkan data Program Promo Anda (contoh: 410999,2,1)</li>
-                        <li>Klik File > Share > Publish to web > Pilih "CSV" > Copy URL</li>
-                        <li>Di Admin Panel, klik "☁️ Sync Google Sheet" dan paste URL tersebut</li>
-                        <li>Klik OK dan data akan tersinkronisasi dari Google Sheets</li>
-                        <li>Di device lain, lakukan hal yang sama untuk auto-sync data!</li>
-                    </ol>
-                    
-                    <p style="margin-bottom: 8px; margin-top: 12px; color: #333;"><strong>📌 OPSI 2: Export/Import File JSON (Manual)</strong></p>
-                    <ol style="margin-left: 20px; color: #555;">
-                        <li>Di device pertama, klik "📥 Unduh Pengaturan" untuk download file .JSON</li>
-                        <li>Share file tersebut ke device lain (email, cloud storage, USB, dll)</li>
-                        <li>Di device lain, buka Admin Panel dan klik "📤 Unggah Pengaturan"</li>
-                        <li>Pilih file .JSON yang sudah di-download, dan konfirmasi untuk import</li>
-                        <li>Pengaturan akan langsung tersimpan di device tersebut!</li>
-                    </ol>
-                    
-                    <p style="margin-bottom: 8px; margin-top: 12px; color: #333;"><strong>📌 OPSI 3: Embed ke HTML (Permanen)</strong></p>
-                    <ol style="margin-left: 20px; color: #555;">
-                        <li>Di Admin Panel, klik "💾 Embed ke HTML"</li>
-                        <li>Kode akan otomatis dicopy ke clipboard</li>
-                        <li>Buka file <code>index.html</code> dengan text editor (Notepad, VS Code, dll)</li>
-                        <li>Cari baris yang berisi: <code>let kelipatanLoadingMap = {};</code> (sekitar baris 1900-an)</li>
-                        <li>Ganti seluruh baris tersebut dengan kode yang sudah dicopy</li>
-                        <li>SAVE file, lalu reload browser</li>
-                        <li>Pengaturan akan menjadi default dan tersimpan permanen dalam file HTML!</li>
-                    </ol>
-                </div>
 
-                <div style="background: #fff3e0; padding: 10px; border-radius: 8px; border-left: 4px solid #ff9800; font-size: 0.82rem; color: #e65100;">
-                    <strong>⚠️ TIPS PENTING:</strong>
-                    <ul style="margin-left: 20px; margin-top: 6px;">
-                        <li>Google Sheets adalah cara TERBAIK untuk real-time sync antar device</li>
-                        <li>Export JSON cocok untuk backup atau share ke teman sekali-waktu</li>
-                        <li>Embed HTML cocok jika ingin pengaturan default yang selalu sama</li>
-                        <li>Selalu backup pengaturan Anda sebelum update file HTML!</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
 
         <div class="admin-section">
             <h3>Upload Produk Baru (CSV)</h3>
@@ -1999,17 +1938,15 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
 
     function autoSyncPromoKelipatan() {
         if (!GOOGLE_PROMO_KELIPATAN_CSV_URL) {
-            console.warn('❌ URL Google Sheet untuk Program Promo belum diatur');
+            alert('❌ URL Google Sheet belum diatur. Klik tombol "Sinkronisasi dari Google Sheet" terlebih dahulu.');
             return;
         }
         
         let statusEl = document.getElementById('kelipatanSyncStatus');
-        if (statusEl) {
-            statusEl.style.display = 'block';
-            statusEl.style.background = '#fff3e0';
-            statusEl.style.color = '#e65100';
-            statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
-        }
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3e0';
+        statusEl.style.color = '#e65100';
+        statusEl.innerHTML = 'Sedang mengambil data dari Google Sheet...';
         
         let googleUrl = GOOGLE_PROMO_KELIPATAN_CSV_URL + '&t=' + new Date().getTime();
         
@@ -2020,13 +1957,9 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         
         var tryNextProxy = function(proxyIndex) {
             if (proxyIndex >= proxies.length) {
-                if (statusEl) {
-                    statusEl.style.background = '#ffebee';
-                    statusEl.style.color = '#c62828';
-                    statusEl.innerHTML = '❌ Gagal sync Google Sheet. Periksa URL dan koneksi.';
-                    setTimeout(() => { statusEl.style.display = 'none'; }, 5000);
-                }
-                console.error('❌ Semua proxy gagal untuk sync Program Promo');
+                statusEl.style.background = '#ffebee';
+                statusEl.style.color = '#c62828';
+                statusEl.innerHTML = '❌ Gagal sync Google Sheet. Pastikan URL valid dan sheet published sebagai CSV.';
                 return;
             }
             
