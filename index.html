@@ -1635,6 +1635,215 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
                 renderPriceList();
             });
         }
+
+        // Listener untuk atur kelipatan loading
+        let formKelipatanLoading = document.getElementById('formKelipatanLoading');
+        if (formKelipatanLoading) {
+            formKelipatanLoading.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let kodeInput = document.getElementById('kelipatanKodeProdukInput').value.trim();
+                let beli = parseInt(document.getElementById('promoBeli').value, 10);
+                let gratis = parseInt(document.getElementById('promoGratis').value, 10);
+                
+                if (!kodeInput) return alert('Pilih atau ketik kode produk terlebih dahulu!');
+                if (isNaN(beli) || beli < 1) beli = 1;
+                if (isNaN(gratis) || gratis < 0) gratis = 0;
+
+                let produkAda = produkList.find(p => String(p.kode) === String(kodeInput));
+                if (!produkAda) {
+                    return alert('❌ Kode produk "' + kodeInput + '" tidak ditemukan di data master!\nSilakan ketik atau pilih kode produk yang valid.');
+                }
+                
+                if (beli === 1 && gratis === 0) {
+                    delete kelipatanLoadingMap[kodeInput];
+                } else {
+                    kelipatanLoadingMap[kodeInput] = {
+                        beli: beli,
+                        gratis: gratis
+                    };
+                }
+                simpanDataKeStorage();
+                renderTabelAdmin();
+                renderPriceList();
+                alert('Pengaturan program promo untuk "' + produkAda.nama + '" berhasil disimpan!');
+                document.getElementById('formKelipatanLoading').reset();
+                document.getElementById('promoBeli').value = 1;
+                document.getElementById('promoGratis').value = 0;
+            });
+        }
+
+        // Listener untuk atur potongan harga
+        let formPotonganHarga = document.getElementById('formPotonganHarga');
+        if (formPotonganHarga) {
+            formPotonganHarga.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let kodeInput = document.getElementById('potonganKodeProdukInput').value.trim();
+                let potongan = parseInt(document.getElementById('potonganValue').value, 10);
+                let minBeli = parseInt(document.getElementById('potonganMinBeli').value, 10);
+                
+                if (!kodeInput) return alert('Pilih atau ketik kode produk terlebih dahulu!');
+                if (isNaN(potongan) || potongan < 0) potongan = 0;
+                if (isNaN(minBeli) || minBeli < 1) minBeli = 1;
+
+                let produkAda = produkList.find(p => String(p.kode) === String(kodeInput));
+                if (!produkAda) {
+                    return alert('❌ Kode produk "' + kodeInput + '" tidak ditemukan di data master!\nSilakan ketik atau pilih kode produk yang valid.');
+                }
+                
+                if (potongan === 0) {
+                    delete potonganHargaMap[kodeInput];
+                } else {
+                    potonganHargaMap[kodeInput] = {
+                        potongan: potongan,
+                        minBeli: minBeli
+                    };
+                }
+                simpanDataKeStorage();
+                renderTabelAdmin();
+                renderPriceList();
+                alert('Potongan harga untuk "' + produkAda.nama + '" berhasil disimpan!');
+                document.getElementById('formPotonganHarga').reset();
+                document.getElementById('potonganMinBeli').value = 1;
+            });
+        }
+
+        // Listener untuk atur sales
+        let formTambahSales = document.getElementById('formTambahSales');
+        if (formTambahSales) {
+            formTambahSales.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let area = document.getElementById('adminArea').value;
+                let kode = String(document.getElementById('adminKodeSales').value || '').trim().replace(/^0+/, '');
+                let nama = document.getElementById('adminNamaSales').value;
+
+                if (!area) return alert('Pilih area terlebih dahulu!');
+                if (!kode) return alert('Kode sales wajib diisi!');
+                if (!nama) return alert('Nama sales wajib diisi!');
+                if (!/^[0-9]{2,5}$/.test(kode)) return alert('Kode sales harus 2-5 digit angka!');
+
+                if (editingSalesOldInfo) {
+                    let oldArea = editingSalesOldInfo.area;
+                    let idx = dataSales[oldArea].findIndex(s => s.kode === editingSalesOldInfo.kode);
+                    if (idx > -1) dataSales[oldArea].splice(idx, 1);
+                    
+                    if (!dataSales[area]) dataSales[area] = [];
+                    dataSales[area].push({ kode: kode, nama: nama });
+                    
+                    editingSalesOldInfo = null;
+                    let btn = document.querySelector('#formTambahSales .btn-tambah');
+                    btn.textContent = 'Tambah Sales';
+                    btn.style.background = '';
+                    console.log('Update sales: ' + nama + ' (' + kode + ')');
+                } else {
+                    for (const a in dataSales) {
+                        if (dataSales[a] && dataSales[a].some(function(s){ return String(s.kode) === String(kode); })) {
+                            return alert('Kode sales "' + kode + '" sudah digunakan.');
+                        }
+                    }
+                    if (!dataSales[area]) dataSales[area] = [];
+                    dataSales[area].push({kode: kode, nama: nama});
+                    alert('Sales "' + nama + '" (kode: ' + kode + ') berhasil ditambahkan di ' + area + '!');
+                }
+
+                simpanDataKeStorage();
+                document.getElementById('formTambahSales').reset();
+                renderTabelAdmin();
+            });
+        }
+
+        // Listener untuk upload produk CSV
+        let formUploadProdukCsv = document.getElementById('formUploadProdukCsv');
+        if (formUploadProdukCsv) {
+            formUploadProdukCsv.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let fileInput = document.getElementById('fileCsvProduk');
+                let file = fileInput.files[0];
+                if (!file) return alert('Pilih file CSV terlebih dahulu!');
+
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let csvContent = event.target.result;
+                    let lines = csvContent.split('\n');
+                    let updated = 0;
+                    let skipped = 0;
+
+                    for (let i = 0; i < lines.length; i++) {
+                        let line = lines[i].trim();
+                        if (!line || (i === 0 && line.toLowerCase().includes('kode'))) continue;
+
+                        let parts = line.split(',');
+                        if (parts.length >= 3) {
+                            let kode = parts[0].trim();
+                            let nama = parts[1].trim();
+                            let harga = parseInt(parts[2].trim());
+
+                            if (kode && nama && !isNaN(harga)) {
+                                if (!produkList.some(p => String(p.kode) === String(kode))) {
+                                    produkList.push({kode: kode, nama: nama, harga: harga});
+                                    updated++;
+                                } else { skipped++; }
+                            }
+                        }
+                    }
+                    if (updated > 0) {
+                        simpanDataKeStorage();
+                        renderTabelAdmin();
+                        renderPriceList();
+                        alert('Berhasil upload ' + updated + ' produk baru!' + (skipped > 0 ? '\n' + skipped + ' item dilewati karena kode sudah ada.' : ''));
+                    } else { alert('Tidak ada produk baru yang ditambahkan. Cek format file kamu.'); }
+                    fileInput.value = '';
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        // Listener untuk upload sales CSV
+        let formUploadSalesCsv = document.getElementById('formUploadSalesCsv');
+        if (formUploadSalesCsv) {
+            formUploadSalesCsv.addEventListener('submit', function(e) {
+                e.preventDefault();
+                let fileInput = document.getElementById('fileCsvSales');
+                let file = fileInput.files[0];
+                if (!file) return alert('Pilih file CSV terlebih dahulu!');
+
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let csvContent = event.target.result;
+                    let lines = csvContent.split('\n');
+                    let updated = 0;
+                    let errorLines = [];
+
+                    for (let i = 0; i < lines.length; i++) {
+                        let line = lines[i].trim();
+                        if (!line || (i === 0 && line.toLowerCase().includes('area'))) continue;
+
+                        let parts = line.split(',');
+                        if (parts.length >= 3) {
+                            let area = parts[0].trim();
+                            let kode = parts[1].trim().replace(/^0+/, '');
+                            let nama = parts[2].trim();
+
+                            if (['MUH KEDIRI1', 'MUH KEDIRI2', 'MUH KEDIRI3'].includes(area) && kode && nama && /^[0-9]{2,5}$/.test(kode)) {
+                                if (!dataSales[area]) dataSales[area] = [];
+                                if (!dataSales[area].some(s => s.kode === kode)) {
+                                    dataSales[area].push({kode: kode, nama: nama});
+                                    updated++;
+                                } else { errorLines.push('Baris ' + (i+1) + ': Kode ' + kode + ' sudah ada di ' + area); }
+                            } else {
+                                errorLines.push('Baris ' + (i+1) + ': Format tidak valid (area harus MUH KEDIRI1/2/3, kode 2-5 digit)');
+                            }
+                        }
+                    }
+                    if (updated > 0) {
+                        simpanDataKeStorage();
+                        renderTabelAdmin();
+                        alert('Berhasil upload ' + updated + ' sales baru!' + (errorLines.length > 0 ? '\n' + errorLines.slice(0, 3).join('\n') : ''));
+                    } else { alert('Tidak ada sales baru yang ditambahkan. Cek format file kamu.'); }
+                    fileInput.value = '';
+                };
+                reader.readAsText(file);
+            });
+        }
     });
 
     function renderTabelAdmin() {
@@ -1718,39 +1927,7 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
     // EVENT LISTENER SUDAH DIPINDAHKAN KE window.addEventListener('load') UNTUK SAFETY
     // document.getElementById('formTambahProduk').addEventListener('submit', function(e) { ... });
 
-    // Listener untuk atur kelipatan loading saja
-    document.getElementById('formKelipatanLoading').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let kodeInput = document.getElementById('kelipatanKodeProdukInput').value.trim();
-        let beli = parseInt(document.getElementById('promoBeli').value, 10);
-        let gratis = parseInt(document.getElementById('promoGratis').value, 10);
-        
-        if (!kodeInput) return alert('Pilih atau ketik kode produk terlebih dahulu!');
-        if (isNaN(beli) || beli < 1) beli = 1;
-        if (isNaN(gratis) || gratis < 0) gratis = 0;
-
-        // Validasi: pastikan kode produk tersebut ada di produkList
-        let produkAda = produkList.find(p => String(p.kode) === String(kodeInput));
-        if (!produkAda) {
-            return alert('❌ Kode produk "' + kodeInput + '" tidak ditemukan di data master!\nSilakan ketik atau pilih kode produk yang valid.');
-        }
-        
-        if (beli === 1 && gratis === 0) {
-            delete kelipatanLoadingMap[kodeInput];
-        } else {
-            kelipatanLoadingMap[kodeInput] = {
-                beli: beli,
-                gratis: gratis
-            };
-        }
-        simpanDataKeStorage();
-        renderTabelAdmin();
-        renderPriceList();
-        alert('Pengaturan program promo untuk "' + produkAda.nama + '" berhasil disimpan!');
-        document.getElementById('formKelipatanLoading').reset();
-        document.getElementById('promoBeli').value = 1;
-        document.getElementById('promoGratis').value = 0;
-    });
+    // Listener sudah dipindahkan ke window.addEventListener('load')
 
     function populateKelipatanDatalist() {
         let datalist = document.getElementById('produkListDatalist');
@@ -2071,38 +2248,7 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         }
     }
 
-    // Listener untuk atur potongan harga
-    document.getElementById('formPotonganHarga').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let kodeInput = document.getElementById('potonganKodeProdukInput').value.trim();
-        let potongan = parseInt(document.getElementById('potonganValue').value, 10);
-        let minBeli = parseInt(document.getElementById('potonganMinBeli').value, 10);
-        
-        if (!kodeInput) return alert('Pilih atau ketik kode produk terlebih dahulu!');
-        if (isNaN(potongan) || potongan < 0) potongan = 0;
-        if (isNaN(minBeli) || minBeli < 1) minBeli = 1;
-
-        // Validasi: pastikan kode produk tersebut ada di produkList
-        let produkAda = produkList.find(p => String(p.kode) === String(kodeInput));
-        if (!produkAda) {
-            return alert('❌ Kode produk "' + kodeInput + '" tidak ditemukan di data master!\nSilakan ketik atau pilih kode produk yang valid.');
-        }
-        
-        if (potongan === 0) {
-            delete potonganHargaMap[kodeInput];
-        } else {
-            potonganHargaMap[kodeInput] = {
-                potongan: potongan,
-                minBeli: minBeli
-            };
-        }
-        simpanDataKeStorage();
-        renderTabelAdmin();
-        renderPriceList();
-        alert('Potongan harga untuk "' + produkAda.nama + '" berhasil disimpan!');
-        document.getElementById('formPotonganHarga').reset();
-        document.getElementById('potonganMinBeli').value = 1;
-    });
+    // Listener sudah dipindahkan ke window.addEventListener('load')
 
     function renderTabelPotonganHarga() {
         let tbody = document.querySelector('#tabelPotonganHarga tbody');
@@ -2163,92 +2309,10 @@ if (!/^[0-9]{2,5}$/.test(kodeCsv)) {
         document.getElementById('formTambahSales').scrollIntoView({ behavior: 'smooth' });
     }
 
-    document.getElementById('formTambahSales').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let area = document.getElementById('adminArea').value;
-        let kode = String(document.getElementById('adminKodeSales').value || '').trim().replace(/^0+/, '');
-        let nama = document.getElementById('adminNamaSales').value;
-
-        if (!area) return alert('Pilih area terlebih dahulu!');
-        if (!kode) return alert('Kode sales wajib diisi!');
-        if (!nama) return alert('Nama sales wajib diisi!');
-if (!/^[0-9]{2,5}$/.test(kode)) return alert('Kode sales harus 2-5 digit angka!');
-
-        if (editingSalesOldInfo) {
-            // Mode Update
-            // Hapus data lama dari area asalnya
-            let oldArea = editingSalesOldInfo.area;
-            let idx = dataSales[oldArea].findIndex(s => s.kode === editingSalesOldInfo.kode);
-            if (idx > -1) dataSales[oldArea].splice(idx, 1);
-            
-            // Tambah data baru ke area yang dipilih
-            if (!dataSales[area]) dataSales[area] = [];
-            dataSales[area].push({ kode: kode, nama: nama });
-            
-            editingSalesOldInfo = null;
-            let btn = document.querySelector('#formTambahSales .btn-tambah');
-            btn.textContent = 'Tambah Sales';
-            btn.style.background = '';
-            console.log('Update sales: ' + nama + ' (' + kode + ')');
-        } else {
-            // Mode Tambah Baru
-            for (const a in dataSales) {
-                if (dataSales[a] && dataSales[a].some(function(s){ return String(s.kode) === String(kode); })) {
-                    return alert('Kode sales "' + kode + '" sudah digunakan.');
-                }
-            }
-            if (!dataSales[area]) dataSales[area] = [];
-            dataSales[area].push({kode: kode, nama: nama});
-            alert('Sales "' + nama + '" (kode: ' + kode + ') berhasil ditambahkan di ' + area + '!');
-        }
-
-        simpanDataKeStorage();
-        document.getElementById('formTambahSales').reset();
-        renderTabelAdmin();
-    });
+    // Listener sudah dipindahkan ke window.addEventListener('load')
 
     // ============ UPLOAD PRODUK CSV ============
-    document.getElementById('formUploadProdukCsv').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let fileInput = document.getElementById('fileCsvProduk');
-        let file = fileInput.files[0];
-        if (!file) return alert('Pilih file CSV terlebih dahulu!');
-
-        let reader = new FileReader();
-        reader.onload = function(event) {
-            let csvContent = event.target.result;
-            let lines = csvContent.split('\n');
-            let updated = 0;
-            let skipped = 0;
-
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if (!line || (i === 0 && line.toLowerCase().includes('kode'))) continue;
-
-                let parts = line.split(',');
-                if (parts.length >= 3) {
-                    let kode = parts[0].trim();
-                    let nama = parts[1].trim();
-                    let harga = parseInt(parts[2].trim());
-
-                    if (kode && nama && !isNaN(harga)) {
-                        if (!produkList.some(p => String(p.kode) === String(kode))) {
-                            produkList.push({kode: kode, nama: nama, harga: harga});
-                            updated++;
-                        } else { skipped++; }
-                    }
-                }
-            }
-            if (updated > 0) {
-                simpanDataKeStorage();
-                renderTabelAdmin();
-                renderPriceList();
-                alert('Berhasil upload ' + updated + ' produk baru!' + (skipped > 0 ? '\n' + skipped + ' item dilewati karena kode sudah ada.' : ''));
-            } else { alert('Tidak ada produk baru yang ditambahkan. Cek format file kamu.'); }
-            fileInput.value = '';
-        };
-        reader.readAsText(file);
-    });
+    // Listener sudah dipindahkan ke window.addEventListener('load')
 
     function downloadTemplateProduk() {
         let csvContent = 'kode_produk,nama_produk,harga\n410999,CONTOH PRODUK BARU,25000';
@@ -2260,51 +2324,7 @@ if (!/^[0-9]{2,5}$/.test(kode)) return alert('Kode sales harus 2-5 digit angka!'
     }
 
     // ============ UPLOAD SALES CSV ============
-    document.getElementById('formUploadSalesCsv').addEventListener('submit', function(e) {
-        e.preventDefault();
-        let fileInput = document.getElementById('fileCsvSales');
-        let file = fileInput.files[0];
-        if (!file) return alert('Pilih file CSV terlebih dahulu!');
-
-        let reader = new FileReader();
-        reader.onload = function(event) {
-            let csvContent = event.target.result;
-            let lines = csvContent.split('\n');
-            let updated = 0;
-            let errorLines = [];
-
-            for (let i = 0; i < lines.length; i++) {
-                let line = lines[i].trim();
-                if (!line || (i === 0 && line.toLowerCase().includes('area'))) continue;
-
-                let parts = line.split(',');
-                if (parts.length >= 3) {
-                    let area = parts[0].trim();
-                    let kode = parts[1].trim().replace(/^0+/, '');
-                    let nama = parts[2].trim();
-
-                    if (!dataSales[area]) { errorLines.push('Baris ' + (i+1) + ': Area "' + area + '" tidak dikenal'); continue; }
-if (!/^[0-9]{2,5}$/.test(kode)) { errorLines.push('Baris ' + (i+1) + ': Kode sales harus 2-5 digit angka'); continue; }
-                    
-                    let exists = false;
-                    for (let a in dataSales) { if (dataSales[a].some(s => String(s.kode) === String(kode))) { exists = true; break; } }
-                    
-                    if (!exists) {
-                        dataSales[area].push({kode: kode, nama: nama});
-                        updated++;
-                    } else { errorLines.push('Baris ' + (i+1) + ': Kode ' + kode + ' sudah terdaftar'); }
-                }
-            }
-            if (updated > 0) {
-                simpanDataKeStorage();
-                renderTabelAdmin();
-                alert('Berhasil upload ' + updated + ' sales baru!');
-            }
-            if (errorLines.length > 0) alert('Catatan:\n' + errorLines.slice(0, 5).join('\n'));
-            fileInput.value = '';
-        };
-        reader.readAsText(file);
-    });
+    // Listener sudah dipindahkan ke window.addEventListener('load')
 
     function downloadTemplateSales() {
         let csvContent = 'area,kode_sales,nama_sales\nMUH KEDIRI1,0888,NAMA SALES BARU';
